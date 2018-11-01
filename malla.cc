@@ -252,14 +252,23 @@ void ObjRevolucion::crearTapa (const int tapa, const int M, const int N){
 
 }
 
-void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, const int num_instancias_perf, const int tapa ){
+void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, const int num_instancias_perf, const int tapa){
 
 	Tupla3f ver;
 	float x, y, z, a, b;
+	bool ascendente = true;
+
+	std::vector<Tupla3f> aux = perfil_original;
+
+	// comprobamos si el perfil es ascendente
+	ascendente = this->perfilAscendente(perfil_original, 1);
+
+	// si no es ascendente, permutamos el vector para que lo sea
+	if (!ascendente)
+		aux = this->cambiarAPerfilAscendente(perfil_original);
 
 	int N = num_instancias_perf;
 
-	std::vector<Tupla3f> aux = perfil_original;
 	int M = aux.size();
 
 	if (aux[0](0) == 0 && aux[0](2) == 0){
@@ -284,17 +293,7 @@ void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, co
 
 	// generamos los vertices por rotacion
 
-	for (int i = 0; i < N; i++){
-		a = cos((2*PI*i)/N);
-		b = sin((2*PI*i)/N);
-		for (int j = 0; j < M; j++){
-			x = aux[j](0)*a + aux[j](2)*b;
-			y = aux[j](1);
-			z = aux[j](2)*a - aux[j](0)*b;
-			ver = {x, y, z};
-			vertices.push_back(ver);
-		}
-	}
+	this->generarVertices (N, M, 1, aux);
 
 	// introducimos en el vector de vertices de la malla los vertices correspondientes a las tapas
 
@@ -330,5 +329,77 @@ void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, co
 		colores_default.push_back(color_default);
 		colores_secundario.push_back(color_secundario);
 	}
+
+}
+
+void ObjRevolucion::generarVertices (int N, int M, const int eje, std::vector<Tupla3f> aux){
+
+	float x, y, z, a, b;
+	Tupla3f ver;
+
+	switch (eje){
+	   case 0 :
+		for (int i = 0; i < N; i++){
+			a = cos((2*PI*i)/N);
+			b = sin((2*PI*i)/N);
+			for (int j = 0; j < M; j++){
+				x = aux[j](0);
+				y = aux[j](1)*a + aux[j](2)*b;
+				z = -aux[j](1)*b + aux[j](2)*a;
+				ver = {x, y, z};
+				vertices.push_back(ver);
+			}
+		}
+	   break;
+	   case 1 :
+		for (int i = 0; i < N; i++){
+			a = cos((2*PI*i)/N);
+			b = sin((2*PI*i)/N);
+			for (int j = 0; j < M; j++){
+				x = aux[j](0)*a + aux[j](2)*b;
+				y = aux[j](1);
+				z = aux[j](2)*a - aux[j](0)*b;
+				ver = {x, y, z};
+				vertices.push_back(ver);
+			}
+		}
+	   break;
+	   case 2 :
+		for (int i = 0; i < N; i++){
+			a = cos((2*PI*i)/N);
+			b = sin((2*PI*i)/N);
+			for (int j = 0; j < M; j++){
+				x = aux[j](0)*a + aux[j](1)*b;
+				y = -aux[j](0)*b + aux[j](1)*a;
+				z = aux[j](2);
+				ver = {x, y, z};
+				vertices.push_back(ver);
+			}
+		}
+	   break;
+	};
+
+}
+
+bool ObjRevolucion::perfilAscendente (std::vector<Tupla3f> perfil, const int eje){
+
+	bool aux = true;
+	int M = perfil.size();
+
+	if (perfil[0](eje) > perfil[M - 1](eje))
+		aux = false;
+
+	return aux;
+}
+
+std::vector<Tupla3f> ObjRevolucion::cambiarAPerfilAscendente(std::vector<Tupla3f> perfil_original){
+
+	std::vector<Tupla3f> aux;
+	int M = perfil_original.size();
+
+	for (int i = 0; i < M; i++)
+		aux.push_back(perfil_original[M - 1 - i]);
+
+	return aux;
 
 }

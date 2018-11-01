@@ -19,6 +19,14 @@
 // variable que contiene un puntero a la escena
 Escena *escena = nullptr ;
 
+void funcion_desocupado()
+{
+
+	if (escena != nullptr)
+		escena->mgeDesocupado();
+
+}
+
 
 //***************************************************************************
 // Funcion principal que redibuja la escena

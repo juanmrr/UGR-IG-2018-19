@@ -94,9 +94,23 @@ class ObjRevolucion : public ObjMallaIndexada
       ObjRevolucion();
       ObjRevolucion( const std::string & nombre_ply_perfil, const int num_instancias );
 	ObjRevolucion( const std::string & nombre_ply_perfil, const int num_instancias, const int tapa );
-	void crearTapa (const int tapa, const int M, const int N);
+
    protected:
       void crearMalla( const std::vector<Tupla3f> & perfil_original, const int num_instancias_perf, const int tapa);
+
+   private:
+	void crearTapa (const int tapa, const int M, const int N);
+
+	// genera los vértices por revolución de acuerdo al eje
+	// 0 -> eje x; 1 -> eje y; 2 -> eje z
+	void generarVertices (int N, int M, const int eje, std::vector<Tupla3f> aux);
+
+	// comprueba si el perfil es de orden ascendente y devuelve true en ese caso
+	// 0 -> eje x; 1 -> eje y; 2 -> eje z
+	bool perfilAscendente (std::vector<Tupla3f> perfil, const int eje);
+
+	// cambiar un vector dado en orden descendente por uno dado en orden ascendente
+	std::vector<Tupla3f> cambiarAPerfilAscendente(std::vector<Tupla3f> perfil_original);
 
 } ;
 

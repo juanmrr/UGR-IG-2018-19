@@ -24,6 +24,7 @@ class Escena
    private:
 
    Ejes ejes;
+   bool animado = false;
 
    // variables que definen la posicion de la camara en coordenadas polares
    GLfloat Observer_distance;
@@ -51,6 +52,8 @@ class Escena
    Cono * cono = nullptr;
    Esfera * esfera = nullptr;
    ObjRevolucion * obj_rev = nullptr;
+   ObjJerarquico * obj_jer = nullptr;
+   
 
    // completar: añadir punteros a tetraedro u otros (práctica 1),
    //            y a un objeto PLY y de revolución (práctica 2),
@@ -73,6 +76,8 @@ class Escena
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
+	void mgeDesocupado();
+
 
 };
 #endif

@@ -29,11 +29,12 @@ Escena::Escena()
     // crear los objetos de las prácticas: Mallas o Jerárquicos....
     cubo = new Cubo();
     tetraedro = new Tetraedro();
+    obj_jer = new ObjJerarquico();
 
     // .......completar: ...
     // .....
 
-    num_objetos = 6 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
+    num_objetos = 7 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
 }
 
 //**************************************************************************
@@ -120,9 +121,12 @@ void Escena::dibujar_objeto_actual()
 	 if (ply != nullptr) ply->draw(modo, visualizacion);
 	 else if (obj_rev != nullptr) obj_rev->draw(modo, visualizacion);
 	 break;
+	case 7:
+	 if (obj_jer != nullptr) obj_jer->draw(modo, visualizacion);
+	 break;
       default:
          cout << "draw_object: el número de objeto actual (" << objeto_actual << ") es incorrecto." << endl ;
-         break ;
+       break ;
    }
 }
 
@@ -270,6 +274,20 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		obj_rev = new ObjRevolucion (nombre, num_instancias);
 	 }
 	 break;
+	case '7' :
+	 objeto_actual = 7;
+	 cout << "Objeto jerárquico" << endl;
+	 break;
+	case 'A' :
+	 if (objeto_actual == 7){
+		animado = !animado;
+		if (animado){
+	 		obj_jer->inicioAnimaciones();
+			glutIdleFunc( funcion_desocupado );
+		}else
+			glutIdleFunc( nullptr );
+	 }
+	 break;
    }
    return false ;
 }
@@ -341,4 +359,11 @@ void Escena::change_observer()
    glTranslatef( 0.0, 0.0, -Observer_distance );
    glRotatef( Observer_angle_x, 1.0 ,0.0, 0.0 );
    glRotatef( Observer_angle_y, 0.0, 1.0, 0.0 );
+}
+
+void Escena::mgeDesocupado(){
+	if (objeto_actual == 7){
+		obj_jer->actualizarEstado();
+		glutPostRedisplay();
+	}
 }

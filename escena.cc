@@ -108,20 +108,20 @@ void Escena::dibujar_objeto_actual()
          //  ......completar un caso por cada objeto que se haya creado
 	 if (tetraedro != nullptr) tetraedro->draw(modo, visualizacion);
 	 break;
-      case 3:
+      case 2:
 	 if (cono != nullptr) cono->draw(modo, visualizacion);
 	 break;
-      case 4:
+      case 3:
 	 if (cilindro != nullptr) cilindro->draw(modo, visualizacion);
 	 break;
-      case 5:
+      case 4:
 	 if (esfera != nullptr) esfera->draw(modo, visualizacion);
 	 break;
-      case 6:
+      case 5:
 	 if (ply != nullptr) ply->draw(modo, visualizacion);
 	 else if (obj_rev != nullptr) obj_rev->draw(modo, visualizacion);
 	 break;
-	case 7:
+	case 6:
 	 if (obj_jer != nullptr) obj_jer->draw(modo, visualizacion);
 	 break;
       default:
@@ -210,19 +210,19 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 cout << "Tapadera: " << tapa << "(0: sin tapa; 1: tapa superior; 2: tapa inferior; 3: ambas tapas)" << endl;
 	 switch (objeto_actual)
 		{
-		case 3:
+		case 2:
 			cono = new Cono (5, 25, tapa);
 			break;
-		case 4:
+		case 3:
 			cilindro = new Cilindro (20, 20, tapa);
 			break;
-		case 5:
+		case 4:
 			esfera = new Esfera (20, 20, tapa);
 			break;
 		}
 	 break;
       case '3' :
-	 objeto_actual = 3;
+	 objeto_actual = 2;
 	 cout << "Objeto: cono" << endl;
 	 cout << "Introduzca el número de puntos a generar para el perfil" << endl;
 	 cin >> num_puntos_perf;
@@ -236,7 +236,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 cono = new Cono (num_puntos_perf, num_instancias);
 	 break;
       case '4' :
-	 objeto_actual = 4;
+	 objeto_actual = 3;
 	 cout << "Objeto: cilindro" << endl;
 	 cout << "Introduzca el número de puntos a generar para el perfil" << endl;
 	 cin >> num_puntos_perf;
@@ -250,7 +250,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 cilindro = new Cilindro (num_puntos_perf, num_instancias);
 	 break;
       case '5' :
-	 objeto_actual = 5;
+	 objeto_actual = 4;
 	 cout << "Objeto: esfera" << endl;
 	 cout << "Introduzca el número de puntos a generar para el perfil" << endl;
 	 cin >> num_puntos_perf;
@@ -262,7 +262,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 esfera = new Esfera (num_puntos_perf, num_instancias);
 	 break;
       case '6' :
-	 objeto_actual = 6;
+	 objeto_actual = 5;
 	 cout << "Introduzca el nombre de un archivo PLY" << endl;
 	 cin >> nombre;
 	 tipo = ply::tipo_fichero (nombre);
@@ -275,41 +275,41 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 }
 	 break;
 	case '7' :
-	 objeto_actual = 7;
+	 objeto_actual = 6;
 	 cout << "Objeto jerárquico" << endl;
 	 break;
 	case 'a' :
-	 if (objeto_actual == 7)
+	 if (objeto_actual == 6)
 	 	this->conmutarAnimaciones();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	 break;
 	case 'p' :
-	 if (objeto_actual == 7)
+	 if (objeto_actual == 6)
 	 	obj_jer->siguienteParametro();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case '<' :
- 	 if (objeto_actual == 7)
+ 	 if (objeto_actual == 6)
 	 	obj_jer->decelerar();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case '>' :
-	 if (objeto_actual == 7)
+	 if (objeto_actual == 6)
 	 	obj_jer->acelerar();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case 'z' :
-	 if (objeto_actual == 7)
+	 if (objeto_actual == 6)
 	 	obj_jer->decrementaParamAct();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case 'Z' :
-	 if (objeto_actual == 7)
+	 if (objeto_actual == 6)
 	 	obj_jer->incrementaParamAct();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
@@ -388,14 +388,14 @@ void Escena::change_observer()
 }
 
 void Escena::mgeDesocupado(){
-	if (objeto_actual == 7){
+	if (objeto_actual == 6){
 		obj_jer->actualizarEstado();
 		glutPostRedisplay();
 	}
 }
 
 void Escena::conmutarAnimaciones(){
-	 if (objeto_actual == 7){
+	 if (objeto_actual == 6){
 		animado = !animado;
 		if (animado){
 	 		obj_jer->inicioAnimaciones();

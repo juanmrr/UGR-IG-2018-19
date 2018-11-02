@@ -34,10 +34,10 @@ ObjJerarquico::ObjJerarquico()
 // visualización del objeto Jerárquico con OpenGL,
 // mediante llamadas a los métodos 'draw' del objeto
 
-void ObjJerarquico::draw( const int modo_vis, const bool usar_diferido )
+void ObjJerarquico::draw( const int usar_diferido, const int modo_vis )
 {
    assert( objparam != nullptr );
-   objparam->draw( modo_vis, usar_diferido );
+   objparam->draw( usar_diferido, modo_vis );
 }
 
 

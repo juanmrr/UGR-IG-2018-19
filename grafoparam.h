@@ -30,7 +30,7 @@ class GrafoParam
    GrafoParam();
 
    // función principal de visualización
-   void draw( const int p_modo_vis, const bool p_usar_diferido );
+   void draw( const int p_usar_diferido, const int p_modo_vis );
 
    // actualizar valor efectivo de un parámetro (a partir de su valor no acotado)
    void actualizarValorEfe( const unsigned iparam, const float valor_na );

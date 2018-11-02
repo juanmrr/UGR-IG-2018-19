@@ -29,9 +29,6 @@ void GrafoParam::actualizarValorEfe( const unsigned iparam, const float valor_na
    assert( iparam < num_parametros );
 
    using namespace std ;
-   //cout << "GrafoParam::actualizarValorEfe( " << iparam << ", " << valor_na << " )" << endl ;
-
-   constexpr float vp = 2.5 ;
 
 /*   switch( iparam )
    {
@@ -77,7 +74,7 @@ void GrafoParam::actualizarValorEfe( const unsigned iparam, const float valor_na
 // visualización del objeto Jerárquico con OpenGL,
 // mediante llamadas a los métodos 'draw' de los sub-objetos
 
-void GrafoParam::draw( const int p_modo_vis, const bool p_usar_diferido )
+void GrafoParam::draw( const int p_usar_diferido, const int p_modo_vis )
 {
    // asegurarnos que está inicializado ok
 
@@ -112,19 +109,19 @@ glPushMatrix();
 	glTranslatef (traslacion, 0.0, 0.0);
 	glPushMatrix();
 		glScalef (0.2, 0.2, 0.2);
-		cubo->draw (modo_vis, usar_diferido);
+		cubo->draw (usar_diferido, modo_vis);
 	glPopMatrix();
 	glRotatef (rotacion2, 0.0, 1.0, 0.0);
 	glRotatef (rotacion1, 0.0, 0.0, 1.0);
 	glPushMatrix();
 		glTranslatef (0.0, -1.1, 0.0);
 		glScalef (0.05, 1.1, 0.05);
-		cilindro->draw (modo_vis, usar_diferido);
+		cilindro->draw (usar_diferido, modo_vis);
 	glPopMatrix();
 	glPushMatrix();
 		glTranslatef (0.0, -1.25, 0.0);
 		glScalef (0.2, 0.2, 0.2);
-		esfera->draw (modo_vis, usar_diferido);
+		esfera->draw (usar_diferido, modo_vis);
 	glPopMatrix();
    glPopMatrix();
 glPopMatrix();
@@ -139,16 +136,16 @@ void GrafoParam::brazo (){
 		glPushMatrix();
 			glTranslatef (-1.5, 0.0, 0.0);
 			glScalef (0.4, 0.4, 0.4);
-			cubo->draw (modo_vis, usar_diferido);
+			cubo->draw (usar_diferido, modo_vis);
 		glPopMatrix();
 		glPushMatrix();
 			glRotatef (90.0, 0.0, 0.0, 1.0);
 			glScalef (0.1, 2.0, 0.1);
-			cilindro->draw (modo_vis, usar_diferido);
+			cilindro->draw (usar_diferido, modo_vis);
 		glPopMatrix();
 		glPushMatrix();
 			glScalef (0.2, 0.2, 0.2);
-			cubo->draw (modo_vis, usar_diferido);
+			cubo->draw (usar_diferido, modo_vis);
 		glPopMatrix();
 		glPushMatrix();
 			glTranslatef (-0.5, 0.0, 0.0);
@@ -163,17 +160,17 @@ void GrafoParam::base (){
 	glPushMatrix();
 		glTranslatef (0.0, 0.3, 0.0);
 		glScalef (0.2, 2.0, 0.2);
-		cilindro->draw (modo_vis, usar_diferido);
+		cilindro->draw (usar_diferido, modo_vis);
 	glPopMatrix();
 	glPushMatrix();
 		glTranslatef (0.0, 0.1, 0.0);
 		glScalef (0.7, 0.2, 0.7);
-		cilindro->draw (modo_vis, usar_diferido);
+		cilindro->draw (usar_diferido, modo_vis);
 	glPopMatrix();
 	glPushMatrix();
 		glTranslatef (0.0, 0.05, 0.0);
 		glScalef (1.0, 0.1, 1.0);
-		cubo->draw (modo_vis, usar_diferido);
+		cubo->draw (usar_diferido, modo_vis);
 	glPopMatrix();
 
 }

@@ -78,6 +78,9 @@ class Escena
 	void teclaEspecial( int Tecla1, int x, int y );
 	void mgeDesocupado();
 
+   private:
+	void conmutarAnimaciones();
+
 
 };
 #endif

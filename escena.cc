@@ -162,22 +162,22 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    int num_puntos_perf, num_instancias, tipo;
    float radio, altura;
 
-   switch( toupper(tecla) )
+   switch( tecla )
    {
-      case 'Q' :
+      case 'q' :
          // salir
          return true ;
          break ;
-      case 'O' :
+      case 'o' :
          // activar siguiente objeto
         objeto_actual = (objeto_actual+1) % num_objetos ;
         cout << "objeto actual == " << objeto_actual << endl ;
         break ;
-      case 'M' :
+      case 'm' :
 	 visualizacion = (visualizacion + 1) % 4;
 	 cout << "Modo de visualización: " << visualizacion << " (0: puntos; 1: lineas; 2: solido; 3: ajedrez)" << endl;
 	 break;
-      case 'V' :
+      case 'v' :
 	 modo = (modo + 1) % 2;
 	 cout << "Modo de envío: " << modo << " (0: inmediato; 1: diferido)" << endl;
 	 break;
@@ -189,23 +189,23 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 objeto_actual = 0;
 	 cout << "Objeto: Cubo" << endl;
 	 break;
-      case 'P' :
+      case 's' :
 	 visualizacion = 0;
 	 cout << "Modo de visualización: puntos" << endl;
 	 break;
-      case 'L' :
+      case 'l' :
 	 visualizacion = 1;
 	 cout << "Modo de visualización: líneas" << endl;
 	 break;
-      case 'F' :
+      case 'f' :
 	 visualizacion = 2;
 	 cout << "Modo de visualización: relleno" << endl;
 	 break;
-      case 'C' :
+      case 'c' :
 	 visualizacion = 3;
 	 cout << "Modo de visualización: ajedrez" << endl;
 	 break;
-	case 'T' :
+	case 't' :
 	 tapa = (tapa + 1) % 4;
 	 cout << "Tapadera: " << tapa << "(0: sin tapa; 1: tapa superior; 2: tapa inferior; 3: ambas tapas)" << endl;
 	 switch (objeto_actual)
@@ -278,16 +278,42 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 objeto_actual = 7;
 	 cout << "Objeto jerárquico" << endl;
 	 break;
-	case 'A' :
-	 if (objeto_actual == 7){
-		animado = !animado;
-		if (animado){
-	 		obj_jer->inicioAnimaciones();
-			glutIdleFunc( funcion_desocupado );
-		}else
-			glutIdleFunc( nullptr );
-	 }
+	case 'a' :
+	 if (objeto_actual == 7)
+	 	this->conmutarAnimaciones();
+	 else
+		cout << "No es un objeto jerárquico" << endl;
 	 break;
+	case 'p' :
+	 if (objeto_actual == 7)
+	 	obj_jer->siguienteParametro();
+	 else
+		cout << "No es un objeto jerárquico" << endl;
+	break;
+	case '<' :
+ 	 if (objeto_actual == 7)
+	 	obj_jer->decelerar();
+	 else
+		cout << "No es un objeto jerárquico" << endl;
+	break;
+	case '>' :
+	 if (objeto_actual == 7)
+	 	obj_jer->acelerar();
+	 else
+		cout << "No es un objeto jerárquico" << endl;
+	break;
+	case 'z' :
+	 if (objeto_actual == 7)
+	 	obj_jer->decrementaParamAct();
+	 else
+		cout << "No es un objeto jerárquico" << endl;
+	break;
+	case 'Z' :
+	 if (objeto_actual == 7)
+	 	obj_jer->incrementaParamAct();
+	 else
+		cout << "No es un objeto jerárquico" << endl;
+	break;
    }
    return false ;
 }
@@ -367,3 +393,15 @@ void Escena::mgeDesocupado(){
 		glutPostRedisplay();
 	}
 }
+
+void Escena::conmutarAnimaciones(){
+	 if (objeto_actual == 7){
+		animado = !animado;
+		if (animado){
+	 		obj_jer->inicioAnimaciones();
+			glutIdleFunc( funcion_desocupado );
+		}else
+			glutIdleFunc( nullptr );
+	 }
+}
+

@@ -15,8 +15,9 @@
 
 GrafoParam::GrafoParam()
 {
-   cilindro = new Cilindro( 4, 16 );
+   cilindro = new Cilindro( 8, 16 );
    cubo     = new Cubo();
+   esfera	= new Esfera (16, 16);
 }
 // -----------------------------------------------------------------------------
 // actualizar valor efectivo de un parámetro (a partir de su valor no acotado)
@@ -30,7 +31,7 @@ void GrafoParam::actualizarValorEfe( const unsigned iparam, const float valor_na
 
    constexpr float vp = 2.5 ;
 
-   switch( iparam )
+/*   switch( iparam )
    {
       case 0:
          // altura 1: oscila entre 0.7 y 1.3, a 0.5 oscilaciones por segundo
@@ -52,7 +53,22 @@ void GrafoParam::actualizarValorEfe( const unsigned iparam, const float valor_na
          // (inicialmente es -7.5 grados)
          ag_rotacion_2 = -7.5 + 37.5*sin( 1.5*(2.0*M_PI*valor_na) );
          break ;
-   }
+   }*/
+
+	switch (iparam){
+		case 0:
+			rotacion1 = 30.0*sin( 0.1 * (2.0*M_PI*valor_na));
+		break;
+		case 1:
+			rotacion2 = 45.0*valor_na;
+		break;
+		case 2: 
+			traslacion = 0.2*sin( 0.2 * (2.0*M_PI*valor_na));
+		break;
+		case 3: 
+			rotacion3 = 30*valor_na;
+		break;
+	}
 }
 
 // -----------------------------------------------------------------------------
@@ -65,6 +81,7 @@ void GrafoParam::draw( const int p_modo_vis, const bool p_usar_diferido )
 
    assert( cubo     != nullptr );
    assert( cilindro != nullptr );
+   assert( esfera   != nullptr );
 
    // guardar parametros de visualización para esta llamada a 'draw'
    // (modo de visualización, modo de envío)
@@ -74,46 +91,87 @@ void GrafoParam::draw( const int p_modo_vis, const bool p_usar_diferido )
 
    // dibujar objetos
 
-   constexpr float
-      sep       = 1.5,  // separación entre centros de las columnas
-      radio_cil = 0.5 , // radio del cilindro más fino
-      radio_cil2 = radio_cil+0.1 ; // radio del cilindro más grueso
-
-   glPushMatrix();
-      // primera columna
-      glColor3f( 0.6, 0.2, 0.0 );
-      columna( altura_1, ag_rotacion_1, radio_cil );
-      // segunda columna
-      glPushMatrix();
-         glTranslatef( sep, 0.0, 0.0 );
-         glColor3f( 0.0, 0.2, 0.6 );
-         columna( altura_2, ag_rotacion_2, radio_cil2 );
-      glPopMatrix();
-      // base
-      glColor3f( 0.1, 0.6, 0.1 );
-      glTranslatef( -radio_cil2, -0.1*radio_cil2, -radio_cil2 );
-      glScalef( sep+2.0*radio_cil2, 0.1*radio_cil2, 2.0*radio_cil2 );
-      glTranslatef( 0.5, 0.5, 0.5 );
-      cubo->draw( modo_vis, usar_diferido );
-   glPopMatrix();
+	glPushMatrix();
+		glPushMatrix();
+			base ();
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef (0.0, 2.0, 0.0);
+			brazo ();
+		glPopMatrix();
+	glPopMatrix();
 }
-// -----------------------------------------------------------------------------
-// dibuja un sub-objeto parametrizado:
-// es una columna (cilindro) de altura = 'altura', con un cubo encima,
-// rotado entorno a Y un ángulo en grados = 'ag_rotacion'
 
-void GrafoParam::columna( const float altura, const float ag_rotacion,
-                          const float radio_cil )
-{
+void GrafoParam::bola (){
 
 
+glPushMatrix();
    glPushMatrix();
-      glScalef( radio_cil, altura, radio_cil );
-      cilindro->draw( modo_vis, usar_diferido );
+	glTranslatef (traslacion, 0.0, 0.0);
+	glPushMatrix();
+		glScalef (0.2, 0.2, 0.2);
+		cubo->draw (modo_vis, usar_diferido);
+	glPopMatrix();
+	glRotatef (rotacion2, 0.0, 1.0, 0.0);
+	glRotatef (rotacion1, 0.0, 0.0, 1.0);
+	glPushMatrix();
+		glTranslatef (0.0, -1.1, 0.0);
+		glScalef (0.05, 1.1, 0.05);
+		cilindro->draw (modo_vis, usar_diferido);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef (0.0, -1.25, 0.0);
+		glScalef (0.2, 0.2, 0.2);
+		esfera->draw (modo_vis, usar_diferido);
+	glPopMatrix();
    glPopMatrix();
-   glPushMatrix( );
-      glTranslatef( 0.0, 0.5+altura, 0.0 );
-      glRotatef( ag_rotacion, 0.0, 1.0, 0.0 );
-      cubo->draw( modo_vis, usar_diferido );
-   glPopMatrix();
+glPopMatrix();
+
+}
+
+void GrafoParam::brazo (){
+
+	glPushMatrix();
+		glRotatef (rotacion3, 0.0, 1.0, 0.0);
+		glTranslatef (1.5, 0.0, 0.0);
+		glPushMatrix();
+			glTranslatef (-1.5, 0.0, 0.0);
+			glScalef (0.4, 0.4, 0.4);
+			cubo->draw (modo_vis, usar_diferido);
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef (90.0, 0.0, 0.0, 1.0);
+			glScalef (0.1, 2.0, 0.1);
+			cilindro->draw (modo_vis, usar_diferido);
+		glPopMatrix();
+		glPushMatrix();
+			glScalef (0.2, 0.2, 0.2);
+			cubo->draw (modo_vis, usar_diferido);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef (-0.5, 0.0, 0.0);
+			bola ();
+		glPopMatrix();
+	glPopMatrix();
+
+}
+
+void GrafoParam::base (){
+
+	glPushMatrix();
+		glTranslatef (0.0, 0.3, 0.0);
+		glScalef (0.2, 2.0, 0.2);
+		cilindro->draw (modo_vis, usar_diferido);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef (0.0, 0.1, 0.0);
+		glScalef (0.7, 0.2, 0.7);
+		cilindro->draw (modo_vis, usar_diferido);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef (0.0, 0.05, 0.0);
+		glScalef (1.0, 0.1, 1.0);
+		cubo->draw (modo_vis, usar_diferido);
+	glPopMatrix();
+
 }

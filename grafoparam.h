@@ -42,11 +42,16 @@ class GrafoParam
    void columna( const float altura, const float ag_rotacion,
                              const float radio_cil );
 
+   void bola (); // dibuja la bola con el cable
+   void brazo (); // dibuja el brazo sobre el que cuelga la bola
+   void base (); // dibuja la base junto con la columna central
+
 
    // objetos tipo malla indexada (nodos terminales)
 
    Cilindro * cilindro = nullptr ;
    Cubo *     cubo     = nullptr ;
+   Esfera *	  esfera   = nullptr ;
 
    // parámetros de la llamada actual (o última) a 'draw'
    int modo_vis ;      // modo de visualización
@@ -56,10 +61,7 @@ class GrafoParam
    // valores efectivos de los parámetros (angulos, distancias, factores de
    // escala, etc.....) calculados a partir de los valores no acotados
 
-   float altura_1,       // altura de la primera columna
-         ag_rotacion_1,  // ángulo en grados de rotación (1)
-         altura_2,       // altura de la segunda columna
-         ag_rotacion_2 ; // ángulo en grados de rotación (2)
+   float rotacion1, rotacion2, rotacion3, traslacion;
 
 } ;
 

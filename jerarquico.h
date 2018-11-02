@@ -2,6 +2,8 @@
 //
 // Informática Gráfica (Grado Informática)
 //
+// Juan Manuel Rubio Rodríguez
+//
 // Archivo: jerarquico.h
 // -- declaraciones de clase para el objeto jerárquico de la práctica 3
 //

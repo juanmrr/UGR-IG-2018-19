@@ -1,17 +1,17 @@
 // *****************************************************************************
 //
-// Clase Cubo (práctica 1)
+// Clase Yunque (práctica 1)
 //
 // *****************************************************************************
 
-#ifndef _CUBO_H
-#define _CUBO_H
+#ifndef _YUNQUE_H
+#define _YUNQUE_H
 
-class Cubo : public ObjMallaIndexada{
+class Yunque : public ObjMallaIndexada{
 
    public:
 
-   Cubo(){
+   Yunque(){
 
 	   // inicializar la tabla de vértices
 	   vertices =  {  { -0.5, -0.5, -0.5 }, // 0
@@ -21,7 +21,9 @@ class Cubo : public ObjMallaIndexada{
 		            { +0.5, -0.5, -0.5 }, // 4
 		            { +0.5, -0.5, +0.5 }, // 5
 		            { +0.5, +0.5, -0.5 }, // 6
-		            { +0.5, +0.5, +0.5 }  // 7
+		            { +0.5, +0.5, +0.5 },  // 7
+				{ -1.0, +0.0, +0.0 },
+				{ +1.0, +0.0, +0.0 }
 		         };
 
 	   // inicializar la tabla de caras o triángulos:
@@ -30,10 +32,12 @@ class Cubo : public ObjMallaIndexada{
 
 	   triangulos = { { 0, 2, 4 }, { 4, 2, 6 },
 		            { 1, 5, 3 }, { 3, 5, 7 },
-		            { 1, 3, 0 }, { 0, 3, 2 },
-		            { 5, 4, 7 }, { 7, 4, 6 },
 		            { 1, 0, 5 }, { 5, 0, 4 },
-		            { 3, 7, 2 }, { 2, 7, 6 }
+		            { 3, 7, 2 }, { 2, 7, 6 },
+				{ 2, 0, 8 }, { 3, 8, 1 },
+				{ 3, 2, 8 }, { 8, 0, 1 },
+				{ 7, 9, 6 }, { 9, 4, 6 },
+				{ 9, 5, 4 }, { 7, 5, 9 }
 		          } ;
 
 	   for (int i = 0; i < triangulos.size(); i++)
@@ -49,8 +53,6 @@ class Cubo : public ObjMallaIndexada{
 			colores_default.push_back(color_default);
 			colores_secundario.push_back(color_secundario);
 	   }
-
-	calcular_normales();
 
    }
 

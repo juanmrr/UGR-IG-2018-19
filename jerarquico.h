@@ -16,6 +16,7 @@
 #include "malla.h"
 #include "grafoparam.h"
 
+
 // tipo para registrar instantes de tiempo
 typedef std::chrono::time_point<std::chrono::steady_clock> Instante ;
 

@@ -58,6 +58,9 @@ class ObjMallaIndexada
    std::vector<Tupla3f> colores_default ;    // array de colores con un color por defecto (0,0,0)
    std::vector<Tupla3f> colores_secundario ;    // array de colores secundario para el modo ajedrez
 
+   std::vector<Tupla3f> normales ; // array con las normales de los vértices
+   std::vector<Tupla3f> normales_triangulos ; // array con las normales de los triangulos
+
    // identificadores para buffers
    GLuint id_vbo_ver = 0; // identificador de VBO vertices
    GLuint id_vbo_col_default = 0; // identificador de VBO colores

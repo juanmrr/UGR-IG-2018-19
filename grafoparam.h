@@ -7,6 +7,8 @@
 // Archivo: GrafoParam.h
 // -- declaraciones de clase para el objeto jerárquico de la práctica 3
 //
+//	Implementa el objeto "torito" del examen
+//
 // #############################################################################
 
 #ifndef GRAFOPARAM_H_INCLUDED
@@ -44,16 +46,17 @@ class GrafoParam
    void columna( const float altura, const float ag_rotacion,
                              const float radio_cil );
 
-   void bola (); // dibuja la bola con el cable
-   void brazo (); // dibuja el brazo sobre el que cuelga la bola
-   void base (); // dibuja la base junto con la columna central
-
+   //void bola (); // dibuja la bola con el cable
+   //void brazo (); // dibuja el brazo sobre el que cuelga la bola
+   //void base (); // dibuja la base junto con la columna central
+   void pala();
+   void torito();
 
    // objetos tipo malla indexada (nodos terminales)
 
-   Cilindro * cilindro = nullptr ;
+   //Cilindro * cilindro = nullptr ;
    Cubo *     cubo     = nullptr ;
-   Esfera *	  esfera   = nullptr ;
+   //Esfera *	  esfera   = nullptr ;
 
    // parámetros de la llamada actual (o última) a 'draw'
    int modo_vis ;      // modo de visualización

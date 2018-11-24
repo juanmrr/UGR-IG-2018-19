@@ -17,6 +17,9 @@
 #include "esfera.h"
 #include "cubo.h"
 #include "tetraedro.h"
+#include "yunque.h"
+#include "cuenco.h"
+#include "luz.h"
 
 class Escena
 {
@@ -52,7 +55,12 @@ class Escena
    Cono * cono = nullptr;
    Esfera * esfera = nullptr;
    ObjRevolucion * obj_rev = nullptr;
-   ObjJerarquico * obj_jer = nullptr;
+   //ObjJerarquico * obj_jer = nullptr;
+   Yunque * yunque = nullptr;
+   ObjJerarquico * torito = nullptr;
+   Cuenco * cuenco = nullptr;
+   Luz * luz1 = nullptr;
+   Luz * luz2 = nullptr;
    
 
    // completar: añadir punteros a tetraedro u otros (práctica 1),
@@ -65,6 +73,7 @@ class Escena
 	int visualizacion = 0; // 0 -> modo puntos       1 -> modo aristas       2 -> modo caras	3 -> modo ajedrez
 	int modo = 0; // 0 -> modo inmediato      1 -> modo diferido
 	int tapa = 0; // 0 -> sin tapadera; 1 -> con tapadera superior; 2 -> con tapadera inferior; 3 -> con tapadera superior e inferior
+	int sombreado = 0; // 0 -> sombreado plano; 1 -> sombreado Gouroud
 
    Escena();
 	void inicializar( int UI_window_width, int UI_window_height );

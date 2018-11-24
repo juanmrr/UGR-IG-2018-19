@@ -7,6 +7,8 @@
 // Archivo: GrafoParam.cc
 // -- implementación del objeto jerárquico de la práctica 3
 //
+//	Implementa el objeto "torito" del examen
+//
 // #############################################################################
 
 
@@ -17,9 +19,9 @@
 
 GrafoParam::GrafoParam()
 {
-   cilindro = new Cilindro( 8, 16 );
+   //cilindro = new Cilindro( 8, 16 );
    cubo     = new Cubo();
-   esfera	= new Esfera (16, 16);
+   //esfera	= new Esfera (16, 16);
 }
 // -----------------------------------------------------------------------------
 // actualizar valor efectivo de un parámetro (a partir de su valor no acotado)
@@ -52,7 +54,6 @@ void GrafoParam::actualizarValorEfe( const unsigned iparam, const float valor_na
          // (inicialmente es -7.5 grados)
          ag_rotacion_2 = -7.5 + 37.5*sin( 1.5*(2.0*M_PI*valor_na) );
          break ;
-   }*/
 
 	switch (iparam){
 		case 0:
@@ -68,6 +69,18 @@ void GrafoParam::actualizarValorEfe( const unsigned iparam, const float valor_na
 			rotacion3 = 30*valor_na;
 		break;
 	}
+
+*/
+
+	switch (iparam){
+		case 0:
+			rotacion1 = 30.0*sin( 0.1 * (2.0*M_PI*valor_na));
+		break;
+		case 1: 
+			traslacion = 0.3*sin( 0.2 * (2.0*M_PI*valor_na));
+		break;
+	}
+
 }
 
 // -----------------------------------------------------------------------------
@@ -79,8 +92,8 @@ void GrafoParam::draw( const int p_usar_diferido, const int p_modo_vis )
    // asegurarnos que está inicializado ok
 
    assert( cubo     != nullptr );
-   assert( cilindro != nullptr );
-   assert( esfera   != nullptr );
+   //assert( cilindro != nullptr );
+   //assert( esfera   != nullptr );
 
    // guardar parametros de visualización para esta llamada a 'draw'
    // (modo de visualización, modo de envío)
@@ -89,18 +102,27 @@ void GrafoParam::draw( const int p_usar_diferido, const int p_modo_vis )
    usar_diferido = p_usar_diferido ;
 
    // dibujar objetos
-
-	glPushMatrix();
+/*
 		glPushMatrix();
 			base ();
-		glPopMatrix();
-		glPushMatrix();
 			glTranslatef (0.0, 2.0, 0.0);
 			brazo ();
 		glPopMatrix();
+*/
+
+	glPushMatrix();
+		glPushMatrix();
+			glTranslatef (-0.4, 0.3, 0.0);
+			glScalef (0.8, 0.6, 0.7);
+			cubo->draw (usar_diferido, modo_vis);
+		glPopMatrix();
+		glRotatef (rotacion1, 0.0, 0.0, 1.0);
+		torito();
 	glPopMatrix();
+
 }
 
+/*
 void GrafoParam::bola (){
 
 
@@ -171,6 +193,40 @@ void GrafoParam::base (){
 		glTranslatef (0.0, 0.05, 0.0);
 		glScalef (1.0, 0.1, 1.0);
 		cubo->draw (usar_diferido, modo_vis);
+	glPopMatrix();
+
+}
+*/
+
+void GrafoParam::pala(){
+
+	glPushMatrix();
+		glTranslatef (0.05, 1.0, 0.0);
+		glScalef (0.1, 2.0, 0.5);
+		cubo->draw (usar_diferido, modo_vis);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef (0.6, 0.05, 0.0);
+		glScalef (1.0, 0.1, 0.5);
+		cubo->draw (usar_diferido, modo_vis);
+	glPopMatrix();
+
+}
+
+void GrafoParam::torito(){
+
+
+	glPushMatrix();
+		glPushMatrix();
+			glTranslatef (0.05, 1.5, 0.0);
+			glScalef (0.1, 3.0, 0.5);
+			cubo->draw (usar_diferido, modo_vis);
+		glPopMatrix();
+		glTranslatef (0.0, traslacion, 0.0);
+		glPushMatrix();
+			glTranslatef (0.1, 0.3, 0.0);
+			pala();
+		glPopMatrix();
 	glPopMatrix();
 
 }

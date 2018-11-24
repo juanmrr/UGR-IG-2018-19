@@ -29,12 +29,18 @@ Escena::Escena()
     // crear los objetos de las prácticas: Mallas o Jerárquicos....
     cubo = new Cubo();
     tetraedro = new Tetraedro();
-    obj_jer = new ObjJerarquico();
+    //obj_jer = new ObjJerarquico();
+    torito = new ObjJerarquico();
+    yunque = new Yunque();
+    //cuenco = new Cuenco(10, 10); //-> los parámetros son el numero de puntos del perfil y el numero de instancias a generar
+
+    luz1 = new Luz (GL_LIGHT0, Tupla4f(0.0,0.0,1.0,0.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,1.0,1.0,1.0), Tupla4f(1.0,1.0,1.0,1.0));
+    luz2 = new Luz (GL_LIGHT1, Tupla4f(0.0,0.0,5.0,1.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,0.0,1.0,1.0), Tupla4f(1.0,0.0,1.0,1.0));
 
     // .......completar: ...
     // .....
 
-    num_objetos = 7 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
+    num_objetos = 8 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
 }
 
 //**************************************************************************
@@ -64,6 +70,17 @@ void Escena::dibujar_objeto_actual()
    // (1) configurar OpenGL para el modo actual (puntos/lineas/sólido)
    //    llamar glPolygonMode, glColor... (y alguna cosas más), según dicho modo
    // .........completar (práctica 1)
+
+   switch(sombreado)
+   {
+	case 0:
+		glShadeModel(GL_FLAT);
+		break;
+	case 1:
+		glShadeModel(GL_SMOOTH);
+		break;
+   }
+
    
    switch(visualizacion)
    {
@@ -84,14 +101,14 @@ void Escena::dibujar_objeto_actual()
 	case 2:
 
 	   // dibujar caras
-	   glShadeModel(GL_FLAT);
+	   //glShadeModel(GL_FLAT);
 	   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	   break;
 
 	case 3:
 	   
 	   // modo ajedrez
-	   glShadeModel(GL_FLAT);
+	   //glShadeModel(GL_FLAT);
 	   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	   break;
    }
@@ -121,8 +138,17 @@ void Escena::dibujar_objeto_actual()
 	 if (ply != nullptr) ply->draw(modo, visualizacion);
 	 else if (obj_rev != nullptr) obj_rev->draw(modo, visualizacion);
 	 break;
+	//case 6:
+	// if (obj_jer != nullptr) obj_jer->draw(modo, visualizacion);
+	// break;
+	case 7: 
+	 if (yunque != nullptr) yunque->draw(modo, visualizacion);
+	 break;
 	case 6:
-	 if (obj_jer != nullptr) obj_jer->draw(modo, visualizacion);
+	 if (torito != nullptr) torito->draw(modo, visualizacion);
+	 break;
+	case 8:
+	 if (cuenco != nullptr) cuenco->draw(modo, visualizacion);
 	 break;
       default:
          cout << "draw_object: el número de objeto actual (" << objeto_actual << ") es incorrecto." << endl ;
@@ -279,41 +305,60 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 cout << "Objeto jerárquico" << endl;
 	 break;
 	case 'a' :
-	 if (objeto_actual == 6)
 	 	this->conmutarAnimaciones();
-	 else
-		cout << "No es un objeto jerárquico" << endl;
 	 break;
 	case 'p' :
 	 if (objeto_actual == 6)
-	 	obj_jer->siguienteParametro();
+	 	//obj_jer->siguienteParametro();
+	 	torito->siguienteParametro();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case '<' :
  	 if (objeto_actual == 6)
-	 	obj_jer->decelerar();
+	 	//obj_jer->decelerar();
+	 	torito->decelerar();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case '>' :
 	 if (objeto_actual == 6)
-	 	obj_jer->acelerar();
+	 	//obj_jer->acelerar();
+	 	torito->acelerar();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case 'z' :
 	 if (objeto_actual == 6)
-	 	obj_jer->decrementaParamAct();
+	 	//obj_jer->decrementaParamAct();
+	 	torito->decrementaParamAct();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
 	case 'Z' :
 	 if (objeto_actual == 6)
-	 	obj_jer->incrementaParamAct();
+	 	//obj_jer->incrementaParamAct();
+	 	torito->incrementaParamAct();
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
+	case '8' :
+	 //objeto_actual = 7;
+	 //cout << "Objeto: yunque" << endl;
+	break;
+	case '9' :
+	 //objeto_actual = 8;
+	 //cout << "Objeto: cuenco" << endl;
+	 break;
+	case 'w' :
+	 sombreado = (sombreado + 1) % 2;
+	 break;
+	case 'j' :
+	 luz1->activar();
+	 break;
+	case 'k' :
+	 luz2->activar();
+	 break;
    }
    return false ;
 }
@@ -389,19 +434,25 @@ void Escena::change_observer()
 
 void Escena::mgeDesocupado(){
 	if (objeto_actual == 6){
-		obj_jer->actualizarEstado();
-		glutPostRedisplay();
+		//obj_jer->actualizarEstado();
+		torito->actualizarEstado();
 	}
+	luz2->girar();
+	glutPostRedisplay();
 }
 
 void Escena::conmutarAnimaciones(){
-	 if (objeto_actual == 6){
-		animado = !animado;
-		if (animado){
-	 		obj_jer->inicioAnimaciones();
-			glutIdleFunc( funcion_desocupado );
-		}else
-			glutIdleFunc( nullptr );
-	 }
+
+	 animado = !animado;
+
+	 if (animado){
+		if (objeto_actual == 6){
+	 		//obj_jer->inicioAnimaciones();
+	 		torito->inicioAnimaciones();
+		}
+		luz2->inicioAnimaciones();
+	 	glutIdleFunc( funcion_desocupado );
+	 }else
+		glutIdleFunc( nullptr );
 }
 

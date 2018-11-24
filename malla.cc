@@ -8,6 +8,9 @@
 #include "aux.h"
 #include "ply_reader.h"
 #include "malla.h"
+#include "math.h"
+
+using namespace std;
 
 const float PI = 3.141592;
 
@@ -42,6 +45,9 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   glEnableClientState(GL_COLOR_ARRAY);
   glColorPointer(3, GL_FLOAT, 0, colores_default.data());
 
+  glEnableClientState (GL_NORMAL_ARRAY);
+  glNormalPointer (GL_FLOAT, 0, normales.data());
+
   // habilitar uso de un array de vértices
   glEnableClientState( GL_VERTEX_ARRAY );
   // indicar el formato y la dirección de memoria del array de vértices
@@ -60,6 +66,7 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   // deshabilitar array de vértices
   glDisableClientState( GL_VERTEX_ARRAY );
   glDisableClientState(GL_COLOR_ARRAY);
+  glDisableClientState (GL_NORMAL_ARRAY);
 
 
 /*glEnableClientState( GL_VERTEX_ARRAY );
@@ -159,7 +166,40 @@ void ObjMallaIndexada::draw(int modo, int visualizacion)
 
 void ObjMallaIndexada::calcular_normales()
 {
-   // completar .....(práctica 2)
+
+	Tupla3f normal, a, b;
+	float m;
+	std::vector<int> aux;
+
+	for (int i = 0; i < vertices.size(); i++){
+		normales.push_back(Tupla3f(0,0,0));
+		aux.push_back(0);
+	}
+   
+	for (int i = 0; i < triangulos.size(); i++){
+		a = vertices[triangulos[i](1)] - vertices[triangulos[i](0)];
+		b = vertices[triangulos[i](2)] - vertices[triangulos[i](0)];
+		normal = {a(1) * b(2) - a(2) * b(1), a(0) * b (2) - a(2) * b(0), a(0) * b(1) - a(1) * b(0)};
+		m = sqrt(pow(normal(0), 2) + pow (normal(1), 2) + pow (normal(2), 2));
+
+		// normalizamos el vector
+		normales_triangulos.push_back(Tupla3f(normal(0)/m, normal(1)/m, normal(2)/m));
+
+		normales[triangulos[i](0)] = normales[triangulos[i](0)] + normales_triangulos[i];
+    		normales[triangulos[i](1)] = normales[triangulos[i](1)] + normales_triangulos[i];
+    		normales[triangulos[i](2)] = normales[triangulos[i](2)] + normales_triangulos[i];
+
+		aux[triangulos[i](0)] += 1;
+		aux[triangulos[i](1)] += 1;
+		aux[triangulos[i](2)] += 1;
+	}
+
+	// normalizamos el array de vértices
+	for(int j = 0; j < aux.size(); j++){
+      	normales[j] = normales[j]/aux[j]; 
+    }
+		
+
 }
 
 // *****************************************************************************
@@ -231,23 +271,13 @@ void ObjRevolucion::crearTapa (const int tapa, const int M, const int N){
 	if (tapa == 2 || tapa == 3)
 		for (int i = 0; i < N; i++){
 			triangulo = {(int)vertices.size() - 2, ((M * i) + M) % (N * M), (i * M) % (N * M)};
-			if (i%2){
-				triangulos_par.push_back(triangulo);			
-			}
-			else{
-				triangulos_impar.push_back(triangulo);
-			}
+			triangulos.push_back(triangulo);			
 		}
 
 	if (tapa == 1 || tapa == 3)
 		for (int i = 0; i < N; i++){
 			triangulo = {(int)vertices.size() - 1, ((M * i) + M - 1) % (N * M), ((M * (i + 1)) + M - 1) % (N * M)};
-			if (i%2){
-				triangulos_par.push_back(triangulo);			
-			}
-			else{
-				triangulos_impar.push_back(triangulo);
-			}
+			triangulos.push_back(triangulo);
 		}
 
 }
@@ -310,15 +340,24 @@ void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, co
 			c = M * i + j;
 			d = M * ((i + 1) % N) + j;
 			triangulo = {c, d, d + 1};
-			triangulos_par.push_back(triangulo);
+			triangulos.push_back(triangulo);
 			triangulo = {c, d + 1, c + 1};
-			triangulos_impar.push_back(triangulo);
+			triangulos.push_back(triangulo);
 		}
+	}
+
+	this->crearTapa (tapa, M, N);
+
+	for (int i = 0; i < triangulos.size(); i++){
+		if (i%2)
+			triangulos_impar.push_back(triangulos[i]);
+		else
+			triangulos_par.push_back(triangulos[i]);
 	}
 
 	// generamos las tapas en función del parámetro "tapa"
 
-	this->crearTapa (tapa, M, N);
+	this->calcular_normales();
 
 	// por último, generamos los arrays de colores
 

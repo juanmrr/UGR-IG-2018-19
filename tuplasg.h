@@ -102,6 +102,9 @@ class TuplaG
 
    // obtener una copia normalizada
    TuplaG<T,n> normalized() const ;
+
+   // obtener el producto vectorial
+   TuplaG<T,n> producto_vectorial () ;
 } ;
 
 //----------------------------------------------------------------------

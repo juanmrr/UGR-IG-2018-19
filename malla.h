@@ -91,11 +91,10 @@ class ObjMallaIndexada
    GLuint id_vbo_tri = 0; // identificador de VBO de triangulos
    GLuint id_vbo_tri_par = 0; 
    GLuint id_vbo_tri_impar = 0; 
-   GLuint textura_id;
 
    int material = 0; // posición del material dentro array de materiales
 
-   std::vector<Textura> textura;
+   std::vector<Textura> texturas;
 
 } ;
 

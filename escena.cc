@@ -44,7 +44,7 @@ Escena::Escena()
     // .......completar: ...
     // .....
 
-    num_objetos = 8 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
+    num_objetos = 9 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
 }
 
 //**************************************************************************
@@ -106,6 +106,8 @@ void Escena::dibujar_objeto_actual()
 
 	   // dibujar caras
 	   //glShadeModel(GL_FLAT);
+	   if (objeto_actual == 9)
+		glColor3f (1.0, 1.0, 1.0);
 	   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	   break;
 
@@ -113,6 +115,8 @@ void Escena::dibujar_objeto_actual()
 	   
 	   // modo ajedrez
 	   //glShadeModel(GL_FLAT);
+	   if (objeto_actual == 9)
+		glColor3f (1.0, 1.0, 1.0);
 	   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	   break;
    }
@@ -399,6 +403,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 		break;
 		case 6:
 			torito->sigMaterial();
+			break;
+		case 9:
+			cuadro->sigMaterial();
 			break;
 	 }
 	 break;	

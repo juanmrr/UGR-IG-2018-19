@@ -38,8 +38,8 @@ ObjMallaIndexada::ObjMallaIndexada(){
 
 	ambiente = {0.1, 0.1, 0.1};
 	difusa = {0.1, 0.1, 0.1};
-	especular = {0.8, 0.8, 0.8};
-	brillo = 0.2;
+	especular = {0.1, 0.1, 0.1};
+	brillo = 0.9;
 
 	materiales.push_back(Material(ambiente, difusa, especular, brillo));
 
@@ -73,9 +73,6 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   // con vistas a implementar un modo ajedrez
   // primero vamos a pintar las caras pares...
 
-  glEnableClientState(GL_COLOR_ARRAY);
-  glColorPointer(3, GL_FLOAT, 0, colores_default.data());
-
   if (glIsEnabled(GL_LIGHTING)){
   	glEnableClientState (GL_NORMAL_ARRAY);
   	glNormalPointer (GL_FLOAT, 0, normales.data());
@@ -85,32 +82,45 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   	glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, materiales[material].brillo);
   }
 
-  // habilitar uso de un array de vértices
-  glEnableClientState( GL_VERTEX_ARRAY );
-  // indicar el formato y la dirección de memoria del array de vértices
-  // (son tuplas de 3 valores float, sin espacio entre ellas)
-  glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
+  if (!texturas.empty()){
+  	glEnableClientState (GL_NORMAL_ARRAY);
+	glEnableClientState( GL_VERTEX_ARRAY );
+	glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
+  	glNormalPointer (GL_FLOAT, 0, normales.data());
+	texturas[0].activar();
+	glDrawElements( GL_TRIANGLES, triangulos.size()*3, GL_UNSIGNED_INT, triangulos.data() );
+      glBindTexture(GL_TEXTURE_2D, 0);
+      glDisable(GL_TEXTURE_2D);
+      glDisableClientState (GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState( GL_VERTEX_ARRAY );
+	glDisableClientState (GL_NORMAL_ARRAY);
 
-  //if (!textura.empty()){
-  //	textura[0].activar();
-  // }
+  }
+  else{
+	  glEnableClientState(GL_COLOR_ARRAY);
+	  glColorPointer(3, GL_FLOAT, 0, colores_default.data());
 
-  //glDrawElements (GL_TRIANGLES, triangulos.size()*3, GL_UNSIGNED_INT, triangulos.data());
+	  // habilitar uso de un array de vértices
+	  glEnableClientState( GL_VERTEX_ARRAY );
+	  // indicar el formato y la dirección de memoria del array de vértices
+	  // (son tuplas de 3 valores float, sin espacio entre ellas)
+	  glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
 
-  // visualizar, indicando: tipo de primitiva, número de índices,
-  // tipo de los índices, y dirección de la tabla de índices
-  glDrawElements( GL_TRIANGLES, triangulos_par.size()*3, GL_UNSIGNED_INT, triangulos_par.data() );
-  
-  // si queremos visualizar el modo ajedrez, queremos pintar las caras impares de otro color
-  if (visualizacion == 3)
-	glColorPointer(3, GL_FLOAT, 0, colores_secundario.data());
-  
-  // en cualquier caso, vamos a querer pintar las caras impares
-  glDrawElements( GL_TRIANGLES, triangulos_impar.size()*3, GL_UNSIGNED_INT, triangulos_impar.data() );
-  // deshabilitar array de vértices
-  glDisableClientState( GL_VERTEX_ARRAY );
-  glDisableClientState(GL_COLOR_ARRAY);
-  glDisableClientState (GL_NORMAL_ARRAY);
+	  // visualizar, indicando: tipo de primitiva, número de índices,
+	  // tipo de los índices, y dirección de la tabla de índices
+	  glDrawElements( GL_TRIANGLES, triangulos_par.size()*3, GL_UNSIGNED_INT, triangulos_par.data() );
+	  
+	  // si queremos visualizar el modo ajedrez, queremos pintar las caras impares de otro color
+	  if (visualizacion == 3)
+		glColorPointer(3, GL_FLOAT, 0, colores_secundario.data());
+	  
+	  // en cualquier caso, vamos a querer pintar las caras impares
+	  glDrawElements( GL_TRIANGLES, triangulos_impar.size()*3, GL_UNSIGNED_INT, triangulos_impar.data() );
+	  // deshabilitar array de vértices
+	  glDisableClientState( GL_VERTEX_ARRAY );
+	  glDisableClientState(GL_COLOR_ARRAY);
+	  glDisableClientState (GL_NORMAL_ARRAY);
+  }
 
 /*glEnableClientState( GL_VERTEX_ARRAY );
 glVertexPointer ( 3, GL_FLOAT, 0, vertices.data() );

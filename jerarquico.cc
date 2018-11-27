@@ -154,3 +154,9 @@ void ObjJerarquico::actualizarEstado()
       objparam->actualizarValorEfe( i, valores_na[i] );
    }
 }
+
+void ObjJerarquico::sigMaterial(){
+
+	objparam->sigMaterial();
+
+}

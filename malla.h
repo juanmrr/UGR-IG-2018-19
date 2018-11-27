@@ -12,6 +12,7 @@
 #define OBJETOS_H_INCLUDED
 
 #include "aux.h"
+#include "textura.h"
 
 
 // *****************************************************************************
@@ -24,6 +25,8 @@ class ObjMallaIndexada
 {
    public:
 
+   ObjMallaIndexada();
+
    // dibuja el objeto en modo inmediato
    void draw_ModoInmediato(int visualizacion);
 
@@ -35,7 +38,25 @@ class ObjMallaIndexada
    // o bien a 'draw_MD' (modo diferido, VBOs)
    void draw(int modo, int visualizacion);
 
+   // Visualiza el siguiente material
+   void sigMaterial();
+
    GLuint CrearVBO( GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram );
+
+   private:
+	struct Material{
+		Tupla3f ambiente;
+		Tupla3f difusa;
+		Tupla3f especular;
+		float brillo;
+
+		Material(Tupla3f ambiente, Tupla3f difusa, Tupla3f especular, float brillo){
+			this->ambiente = ambiente;
+			this->difusa = difusa;
+			this->especular = especular;
+			this->brillo = brillo;
+		}
+	};
 
    protected:
 
@@ -61,6 +82,8 @@ class ObjMallaIndexada
    std::vector<Tupla3f> normales ; // array con las normales de los vértices
    std::vector<Tupla3f> normales_triangulos ; // array con las normales de los triangulos
 
+   std::vector<Material> materiales ; // array de materiales
+
    // identificadores para buffers
    GLuint id_vbo_ver = 0; // identificador de VBO vertices
    GLuint id_vbo_col_default = 0; // identificador de VBO colores
@@ -68,7 +91,11 @@ class ObjMallaIndexada
    GLuint id_vbo_tri = 0; // identificador de VBO de triangulos
    GLuint id_vbo_tri_par = 0; 
    GLuint id_vbo_tri_impar = 0; 
-   // completar: tabla de colores, tabla de normales de vértices
+   GLuint textura_id;
+
+   int material = 0; // posición del material dentro array de materiales
+
+   std::vector<Textura> textura;
 
 } ;
 

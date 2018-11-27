@@ -29,9 +29,13 @@ Escena::Escena()
     // crear los objetos de las prácticas: Mallas o Jerárquicos....
     cubo = new Cubo();
     tetraedro = new Tetraedro();
+    cono = new Cono (5, 25, 3);
+    cilindro = new Cilindro (10, 20, 3);
+    esfera = new Esfera (30, 30, 3);
     //obj_jer = new ObjJerarquico();
     torito = new ObjJerarquico();
     yunque = new Yunque();
+    cuadro = new Cuadro();
     //cuenco = new Cuenco(10, 10); //-> los parámetros son el numero de puntos del perfil y el numero de instancias a generar
 
     luz1 = new Luz (GL_LIGHT0, Tupla4f(0.0,0.0,1.0,0.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,1.0,1.0,1.0), Tupla4f(1.0,1.0,1.0,1.0));
@@ -150,6 +154,9 @@ void Escena::dibujar_objeto_actual()
 	case 8:
 	 if (cuenco != nullptr) cuenco->draw(modo, visualizacion);
 	 break;
+	case 9:
+	 if (cuadro != nullptr) cuadro->draw(modo, visualizacion);
+	 break;
       default:
          cout << "draw_object: el número de objeto actual (" << objeto_actual << ") es incorrecto." << endl ;
        break ;
@@ -165,9 +172,17 @@ void Escena::dibujar_objeto_actual()
 
 void Escena::dibujar()
 {
+	glEnable (GL_NORMALIZE);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
-  	ejes.draw();
+	// si las luces están activadas, las desactivamos temporalmente para dibujar los ejes
+	if (glIsEnabled (GL_LIGHTING)){
+		glDisable (GL_LIGHTING);
+  		ejes.draw();
+		glEnable (GL_LIGHTING);
+	}
+	else
+		ejes.draw();
 	dibujar_objeto_actual();
 }
 
@@ -191,9 +206,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
    switch( tecla )
    {
       case 'q' :
-         // salir
-         return true ;
-         break ;
+        // salir
+        return true ;
+        break ;
       case 'o' :
          // activar siguiente objeto
         objeto_actual = (objeto_actual+1) % num_objetos ;
@@ -347,6 +362,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 //cout << "Objeto: yunque" << endl;
 	break;
 	case '9' :
+	 objeto_actual = 9;
 	 //objeto_actual = 8;
 	 //cout << "Objeto: cuenco" << endl;
 	 break;
@@ -359,6 +375,33 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	case 'k' :
 	 luz2->activar();
 	 break;
+	case 'h' :
+	 switch (objeto_actual)
+	 {
+		case 0: 
+			cubo->sigMaterial();
+			break;
+		case 1:
+			tetraedro->sigMaterial();
+			break;
+		case 2:
+			cono->sigMaterial();
+			break;
+		case 3:
+			cilindro->sigMaterial();
+			break;
+		case 4:
+			esfera->sigMaterial();
+			break;
+		case 5:
+	 		if (ply != nullptr) ply->sigMaterial();
+	 		else if (obj_rev != nullptr) obj_rev->sigMaterial();
+	 		break;
+		case 6:
+			torito->sigMaterial();
+			break;
+	 }
+	 break;	
    }
    return false ;
 }

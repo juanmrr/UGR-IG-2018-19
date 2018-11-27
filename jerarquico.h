@@ -64,6 +64,8 @@ class ObjJerarquico
       // (no usa ninguna orden de OpenGL)
       void actualizarEstado();
 
+	void sigMaterial();
+
    private:
       // puntero al objeto con el grafo de escena
       GrafoParam * objparam = nullptr ;

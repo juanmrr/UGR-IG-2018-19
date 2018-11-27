@@ -23,6 +23,14 @@ GrafoParam::GrafoParam()
    cubo     = new Cubo();
    //esfera	= new Esfera (16, 16);
 }
+
+void GrafoParam::sigMaterial(){
+
+	cubo->sigMaterial();
+
+}
+
+
 // -----------------------------------------------------------------------------
 // actualizar valor efectivo de un parámetro (a partir de su valor no acotado)
 

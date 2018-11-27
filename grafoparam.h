@@ -40,6 +40,8 @@ class GrafoParam
    // devuelve el número de parámetros
    unsigned numParametros() { return num_parametros ; }
 
+   void sigMaterial();
+
    private:
 
    // métodos de dibujo de subgrafos

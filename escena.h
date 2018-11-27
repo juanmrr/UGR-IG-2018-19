@@ -20,6 +20,7 @@
 #include "yunque.h"
 #include "cuenco.h"
 #include "luz.h"
+#include "cuadro.h"
 
 class Escena
 {
@@ -61,6 +62,7 @@ class Escena
    Cuenco * cuenco = nullptr;
    Luz * luz1 = nullptr;
    Luz * luz2 = nullptr;
+   Cuadro * cuadro = nullptr;
    
 
    // completar: añadir punteros a tetraedro u otros (práctica 1),
@@ -74,6 +76,7 @@ class Escena
 	int modo = 0; // 0 -> modo inmediato      1 -> modo diferido
 	int tapa = 0; // 0 -> sin tapadera; 1 -> con tapadera superior; 2 -> con tapadera inferior; 3 -> con tapadera superior e inferior
 	int sombreado = 0; // 0 -> sombreado plano; 1 -> sombreado Gouroud
+	int material = 0; // posicion dentro del array de material
 
    Escena();
 	void inicializar( int UI_window_width, int UI_window_height );

@@ -9,10 +9,41 @@
 #include "ply_reader.h"
 #include "malla.h"
 #include "math.h"
+#include "textura.h"
 
 using namespace std;
 
 const float PI = 3.141592;
+
+ObjMallaIndexada::ObjMallaIndexada(){
+
+	Tupla3f ambiente;
+	Tupla3f difusa;
+	Tupla3f especular;
+	float brillo;
+
+	ambiente = {0.1, 0.1, 0.1};
+	difusa = {0.7, 0.7, 0.7};
+	especular = {0.2, 0.2, 0.2};
+	brillo = 0.3;
+
+	materiales.push_back(Material(ambiente, difusa, especular, brillo));
+
+	ambiente = {0.8, 0.8, 0.8};
+	difusa = {0.3, 0.3, 0.3};
+	especular = {0.2, 0.2, 0.2};
+	brillo = 0.4;
+
+	materiales.push_back(Material(ambiente, difusa, especular, brillo));
+
+	ambiente = {0.1, 0.1, 0.1};
+	difusa = {0.1, 0.1, 0.1};
+	especular = {0.8, 0.8, 0.8};
+	brillo = 0.2;
+
+	materiales.push_back(Material(ambiente, difusa, especular, brillo));
+
+}
 
 
 // *****************************************************************************
@@ -45,14 +76,27 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   glEnableClientState(GL_COLOR_ARRAY);
   glColorPointer(3, GL_FLOAT, 0, colores_default.data());
 
-  glEnableClientState (GL_NORMAL_ARRAY);
-  glNormalPointer (GL_FLOAT, 0, normales.data());
+  if (glIsEnabled(GL_LIGHTING)){
+  	glEnableClientState (GL_NORMAL_ARRAY);
+  	glNormalPointer (GL_FLOAT, 0, normales.data());
+	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,  (GLfloat *) &materiales[material].difusa);
+  	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, (GLfloat *) &materiales[material].especular);
+  	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,  (GLfloat *) &materiales[material].ambiente);
+  	glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, materiales[material].brillo);
+  }
 
   // habilitar uso de un array de vértices
   glEnableClientState( GL_VERTEX_ARRAY );
   // indicar el formato y la dirección de memoria del array de vértices
   // (son tuplas de 3 valores float, sin espacio entre ellas)
   glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
+
+  //if (!textura.empty()){
+  //	textura[0].activar();
+  // }
+
+  //glDrawElements (GL_TRIANGLES, triangulos.size()*3, GL_UNSIGNED_INT, triangulos.data());
+
   // visualizar, indicando: tipo de primitiva, número de índices,
   // tipo de los índices, y dirección de la tabla de índices
   glDrawElements( GL_TRIANGLES, triangulos_par.size()*3, GL_UNSIGNED_INT, triangulos_par.data() );
@@ -67,7 +111,6 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   glDisableClientState( GL_VERTEX_ARRAY );
   glDisableClientState(GL_COLOR_ARRAY);
   glDisableClientState (GL_NORMAL_ARRAY);
-
 
 /*glEnableClientState( GL_VERTEX_ARRAY );
 glVertexPointer ( 3, GL_FLOAT, 0, vertices.data() );
@@ -440,5 +483,11 @@ std::vector<Tupla3f> ObjRevolucion::cambiarAPerfilAscendente(std::vector<Tupla3f
 		aux.push_back(perfil_original[M - 1 - i]);
 
 	return aux;
+
+}
+
+void ObjMallaIndexada::sigMaterial(){
+
+	material = (material + 1) % materiales.size();
 
 }

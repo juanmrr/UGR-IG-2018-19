@@ -41,7 +41,7 @@ class Cuadro : public ObjMallaIndexada{
 
 		calcular_normales();
 
-		texturas.push_back(Textura("./logo.jpg"));
+		texturas.push_back(Textura("./Img/logo.jpg"));
 
 	}
 

@@ -17,29 +17,29 @@ const float PI = 3.141592;
 
 ObjMallaIndexada::ObjMallaIndexada(){
 
-	Tupla3f ambiente;
-	Tupla3f difusa;
-	Tupla3f especular;
+	Tupla4f ambiente;
+	Tupla4f difusa;
+	Tupla4f especular;
 	float brillo;
 
-	ambiente = {0.1, 0.1, 0.1};
-	difusa = {0.7, 0.7, 0.7};
-	especular = {0.2, 0.2, 0.2};
-	brillo = 0.3;
+	ambiente = {0.1, 0.1, 0.0, 1.0};
+	difusa = {0.5, 0.5, 0.4, 1.0};
+	especular = {0.7, 0.7, 0.1, 1.0};
+	brillo = 10.3;
 
 	materiales.push_back(Material(ambiente, difusa, especular, brillo));
 
-	ambiente = {0.8, 0.8, 0.8};
-	difusa = {0.3, 0.3, 0.3};
-	especular = {0.2, 0.2, 0.2};
-	brillo = 0.4;
+	ambiente = {0.2, 0.0, 0.0, 1.0};
+	difusa = {0.6, 0.1, 0.1, 1.0};
+	especular = {0.7, 0.6, 0.6, 1.0};
+	brillo = 75.4;
 
 	materiales.push_back(Material(ambiente, difusa, especular, brillo));
 
-	ambiente = {0.1, 0.1, 0.1};
-	difusa = {0.1, 0.1, 0.1};
-	especular = {0.1, 0.1, 0.1};
-	brillo = 0.9;
+	ambiente = {0.2, 0.2, 0.2, 1.0};
+	difusa = {0.5, 0.5, 0.5, 1.0};
+	especular = {0.5, 0.5, 0.5, 1.0};
+	brillo = 50.9;
 
 	materiales.push_back(Material(ambiente, difusa, especular, brillo));
 

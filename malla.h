@@ -50,7 +50,7 @@ class ObjMallaIndexada
 		Tupla3f especular;
 		float brillo;
 
-		Material(Tupla3f ambiente, Tupla3f difusa, Tupla3f especular, float brillo){
+		Material(Tupla4f ambiente, Tupla4f difusa, Tupla4f especular, float brillo){
 			this->ambiente = ambiente;
 			this->difusa = difusa;
 			this->especular = especular;

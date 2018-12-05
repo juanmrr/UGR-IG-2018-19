@@ -20,6 +20,12 @@ Luz::Luz (GLenum indice, Tupla4f punto, Tupla4f luz_ambiente, Tupla4f luz_difusa
 
 }
 
+bool Luz::esta_activa(){
+
+	return activa;
+
+}
+
 void Luz::activar(){
 
 	activa = !activa;
@@ -27,14 +33,6 @@ void Luz::activar(){
 	if (activa){
 		glEnable (indice);
 		glEnable (GL_LIGHTING);
-		glLightfv (indice, GL_AMBIENT, (GLfloat*) &luz_ambiente);
-		glLightfv (indice, GL_DIFFUSE, (GLfloat*) &luz_difusa);
-		glLightfv (indice, GL_SPECULAR, (GLfloat*) &luz_especular);
-    			glMatrixMode(GL_MODELVIEW);
-    			glPushMatrix();
-   			glLoadIdentity();
-			glLightfv (indice, GL_POSITION, (GLfloat*) &punto);
-    			glPopMatrix();
 		luces = luces + 1;
 	}
 	else{
@@ -47,16 +45,17 @@ void Luz::activar(){
 		
 }
 
-void Luz::colocarLuz(){
+void Luz::dibujar(){
 
-    //float rotacion = 30.0*sin( 0.1 * (2.0*M_PI*0.5));
-
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    glRotatef(rotacion, 0.0, 1.0, 0.0);
-    glLightfv (indice, GL_POSITION, (GLfloat*) &punto);
-    glPopMatrix();
+		glLightfv (indice, GL_AMBIENT, (GLfloat*) &luz_ambiente);
+		glLightfv (indice, GL_DIFFUSE, (GLfloat*) &luz_difusa);
+		glLightfv (indice, GL_SPECULAR, (GLfloat*) &luz_especular);
+    			glMatrixMode(GL_MODELVIEW);
+    			glPushMatrix();
+   		//	glLoadIdentity();
+			glRotatef(rotacion, 0.0, 1.0, 0.0);
+			glLightfv (indice, GL_POSITION, (GLfloat*) &punto);
+    			glPopMatrix();
 
 }
 
@@ -80,7 +79,6 @@ void Luz::girar(){
 void Luz::rotar(float duracion){
 
 	rotacion = fmod((rotacion + duracion), 360);
-	colocarLuz();
 
 }
 

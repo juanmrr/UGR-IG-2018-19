@@ -24,10 +24,11 @@ class Luz
 	Luz (GLenum indice, Tupla4f punto, Tupla4f luz_ambiente, Tupla4f luz_difusa, Tupla4f luz_especular);
 
 	void activar();
-	void colocarLuz();
+	void dibujar();
 	void inicioAnimaciones();
 	void girar();
 	void rotar(float duracion);
+	bool esta_activa();
 
 	protected:
 

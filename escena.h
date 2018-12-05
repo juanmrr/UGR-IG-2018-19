@@ -29,6 +29,7 @@ class Escena
 
    Ejes ejes;
    bool animado = false;
+   std::vector<Luz> luces;
 
    // variables que definen la posicion de la camara en coordenadas polares
    GLfloat Observer_distance;
@@ -39,7 +40,8 @@ class Escena
    GLfloat Width, Height, Front_plane, Back_plane;
 
    void clear_window();
-	void dibujar_objeto_actual();
+   void dibujar_objeto_actual();
+   void dibujar_luces();
 
    // Transformación de cámara
 	void change_projection( const float ratio_xy );
@@ -60,8 +62,6 @@ class Escena
    Yunque * yunque = nullptr;
    ObjJerarquico * torito = nullptr;
    Cuenco * cuenco = nullptr;
-   Luz * luz1 = nullptr;
-   Luz * luz2 = nullptr;
    Cuadro * cuadro = nullptr;
    
 

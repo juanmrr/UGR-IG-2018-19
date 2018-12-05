@@ -38,8 +38,8 @@ Escena::Escena()
     cuadro = new Cuadro();
     //cuenco = new Cuenco(10, 10); //-> los parámetros son el numero de puntos del perfil y el numero de instancias a generar
 
-    luz1 = new Luz (GL_LIGHT0, Tupla4f(0.0,0.0,1.0,0.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,1.0,1.0,1.0), Tupla4f(1.0,1.0,1.0,1.0));
-    luz2 = new Luz (GL_LIGHT1, Tupla4f(0.0,0.0,5.0,1.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,0.0,1.0,1.0), Tupla4f(1.0,0.0,1.0,1.0));
+    luces.push_back(Luz(GL_LIGHT0, Tupla4f(0.0,0.0,1.0,0.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,1.0,1.0,1.0), Tupla4f(1.0,1.0,1.0,1.0)));
+    luces.push_back(Luz(GL_LIGHT1, Tupla4f(0.0,10.0,10.0,1.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,0.0,1.0,1.0), Tupla4f(1.0,0.0,1.0,1.0)));
 
     // .......completar: ...
     // .....
@@ -167,6 +167,14 @@ void Escena::dibujar_objeto_actual()
    }
 }
 
+void Escena::dibujar_luces(){
+
+	for (int i = 0; i < luces.size(); i++)
+		if (luces[i].esta_activa())
+			luces[i].dibujar();
+
+}
+
 // **************************************************************************
 //
 // función de dibujo de la escena: limpia ventana, fija cámara, dibuja ejes,
@@ -182,11 +190,13 @@ void Escena::dibujar()
 	// si las luces están activadas, las desactivamos temporalmente para dibujar los ejes
 	if (glIsEnabled (GL_LIGHTING)){
 		glDisable (GL_LIGHTING);
-  		ejes.draw();
+  			ejes.draw();
 		glEnable (GL_LIGHTING);
 	}
 	else
 		ejes.draw();
+	if (glIsEnabled(GL_LIGHTING))
+		dibujar_luces();
 	dibujar_objeto_actual();
 }
 
@@ -374,10 +384,10 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 sombreado = (sombreado + 1) % 2;
 	 break;
 	case 'j' :
-	 luz1->activar();
+	 luces[0].activar();
 	 break;
 	case 'k' :
-	 luz2->activar();
+	 luces[1].activar();
 	 break;
 	case 'h' :
 	 switch (objeto_actual)
@@ -487,7 +497,7 @@ void Escena::mgeDesocupado(){
 		//obj_jer->actualizarEstado();
 		torito->actualizarEstado();
 	}
-	luz2->girar();
+	luces[1].girar();
 	glutPostRedisplay();
 }
 
@@ -500,7 +510,7 @@ void Escena::conmutarAnimaciones(){
 	 		//obj_jer->inicioAnimaciones();
 	 		torito->inicioAnimaciones();
 		}
-		luz2->inicioAnimaciones();
+		luces[1].inicioAnimaciones();
 	 	glutIdleFunc( funcion_desocupado );
 	 }else
 		glutIdleFunc( nullptr );

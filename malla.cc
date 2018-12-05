@@ -73,9 +73,12 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   // con vistas a implementar un modo ajedrez
   // primero vamos a pintar las caras pares...
 
+  glEnableClientState (GL_NORMAL_ARRAY);
+  glEnableClientState( GL_VERTEX_ARRAY );
+  glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
+  glNormalPointer (GL_FLOAT, 0, normales.data());
+
   if (glIsEnabled(GL_LIGHTING)){
-  	glEnableClientState (GL_NORMAL_ARRAY);
-  	glNormalPointer (GL_FLOAT, 0, normales.data());
 	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,  (GLfloat *) &materiales[material].difusa);
   	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, (GLfloat *) &materiales[material].especular);
   	glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,  (GLfloat *) &materiales[material].ambiente);
@@ -83,10 +86,6 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   }
 
   if (!texturas.empty()){
-  	glEnableClientState (GL_NORMAL_ARRAY);
-	glEnableClientState( GL_VERTEX_ARRAY );
-	glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
-  	glNormalPointer (GL_FLOAT, 0, normales.data());
 	texturas[0].activar();
 	glDrawElements( GL_TRIANGLES, triangulos.size()*3, GL_UNSIGNED_INT, triangulos.data() );
       glBindTexture(GL_TEXTURE_2D, 0);
@@ -99,13 +98,6 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   else{
 	  glEnableClientState(GL_COLOR_ARRAY);
 	  glColorPointer(3, GL_FLOAT, 0, colores_default.data());
-
-	  // habilitar uso de un array de vértices
-	  glEnableClientState( GL_VERTEX_ARRAY );
-	  // indicar el formato y la dirección de memoria del array de vértices
-	  // (son tuplas de 3 valores float, sin espacio entre ellas)
-	  glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
-
 	  // visualizar, indicando: tipo de primitiva, número de índices,
 	  // tipo de los índices, y dirección de la tabla de índices
 	  glDrawElements( GL_TRIANGLES, triangulos_par.size()*3, GL_UNSIGNED_INT, triangulos_par.data() );
@@ -122,11 +114,6 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
 	  glDisableClientState (GL_NORMAL_ARRAY);
   }
 
-/*glEnableClientState( GL_VERTEX_ARRAY );
-glVertexPointer ( 3, GL_FLOAT, 0, vertices.data() );
-glDrawElements ( GL_TRIANGLES, triangulos.size()*3, GL_UNSIGNED_INT, triangulos.data() );
-glDisableClientState (GL_VERTEX_ARRAY);
-*/
 }
 
 // -----------------------------------------------------------------------------
@@ -232,7 +219,7 @@ void ObjMallaIndexada::calcular_normales()
 	for (int i = 0; i < triangulos.size(); i++){
 		a = vertices[triangulos[i](1)] - vertices[triangulos[i](0)];
 		b = vertices[triangulos[i](2)] - vertices[triangulos[i](0)];
-		normal = {a(1) * b(2) - a(2) * b(1), a(0) * b (2) - a(2) * b(0), a(0) * b(1) - a(1) * b(0)};
+		normal = {a(1) * b(2) - a(2) * b(1), a(2) * b (0) - a(0) * b(2), a(0) * b(1) - a(1) * b(0)};
 		m = sqrt(pow(normal(0), 2) + pow (normal(1), 2) + pow (normal(2), 2));
 
 		// normalizamos el vector
@@ -251,7 +238,6 @@ void ObjMallaIndexada::calcular_normales()
 	for(int j = 0; j < aux.size(); j++){
       	normales[j] = normales[j]/aux[j]; 
     }
-		
 
 }
 
@@ -399,6 +385,9 @@ void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, co
 		}
 	}
 
+
+	// generamos las tapas en función del parámetro "tapa"
+
 	this->crearTapa (tapa, M, N);
 
 	for (int i = 0; i < triangulos.size(); i++){
@@ -407,8 +396,6 @@ void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, co
 		else
 			triangulos_par.push_back(triangulos[i]);
 	}
-
-	// generamos las tapas en función del parámetro "tapa"
 
 	this->calcular_normales();
 

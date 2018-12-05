@@ -54,6 +54,8 @@ class Yunque : public ObjMallaIndexada{
 			colores_secundario.push_back(color_secundario);
 	   }
 
+	   calcular_normales();
+
    }
 
 };

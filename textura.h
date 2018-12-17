@@ -15,7 +15,6 @@ class Textura {
 
 		static int texturasActivas;
 		GLuint textura_id;
-   		std::vector<Tupla2f> coordenadas_texturas_vertices;
 		std::vector<unsigned char> data;
 		int ancho;
 		int alto;

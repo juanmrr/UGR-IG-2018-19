@@ -37,7 +37,7 @@ ObjJerarquico::ObjJerarquico()
 void ObjJerarquico::draw( const int usar_diferido, const int modo_vis )
 {
    assert( objparam != nullptr );
-   objparam->draw( usar_diferido, modo_vis );
+   objparam->draw( usar_diferido, modo_vis);
 }
 
 

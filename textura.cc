@@ -1,9 +1,9 @@
 #include "textura.h"
 #include <string>
-
 #include <GL/glut.h>
-
 #include "CImg.h"
+#include "malla.h"
+
 using namespace cimg_library;
 
 using namespace std ;
@@ -31,11 +31,6 @@ Textura::Textura(const char *filename){
 	ancho = logo.width();
 	alto = logo.height();
 
-   coordenadas_texturas_vertices.push_back(Tupla2f(0.0,1.0));
-   coordenadas_texturas_vertices.push_back(Tupla2f(1.0,1.0));
-   coordenadas_texturas_vertices.push_back(Tupla2f(0.0,0.0));
-   coordenadas_texturas_vertices.push_back(Tupla2f(1.0,0.0));
-
 }
 
 void Textura::activar(){
@@ -44,19 +39,19 @@ void Textura::activar(){
    glBindTexture(GL_TEXTURE_2D, textura_id);
 
    glActiveTexture(GL_TEXTURE0);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
    // TRASFIERE LOS DATOS A GPU
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ancho, alto, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data());
+   gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, ancho, alto, GL_RGB, GL_UNSIGNED_BYTE, data.data());
 
    glActiveTexture(GL_TEXTURE0);
    glEnable(GL_TEXTURE_2D);
    glEnableClientState (GL_TEXTURE_COORD_ARRAY);
    glBindTexture( GL_TEXTURE_2D, textura_id ); // activa textura con id textura_id
-   glTexCoordPointer(2, GL_FLOAT, 0, coordenadas_texturas_vertices.data());
+
    //glBindTexture(GL_TEXTURE_2D, 0);
 
 }

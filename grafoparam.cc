@@ -122,7 +122,7 @@ void GrafoParam::draw( const int p_usar_diferido, const int p_modo_vis )
 		glPushMatrix();
 			glTranslatef (-0.4, 0.3, 0.0);
 			glScalef (0.8, 0.6, 0.7);
-			cubo->draw (usar_diferido, modo_vis);
+			cubo->draw (usar_diferido, modo_vis, 0);
 		glPopMatrix();
 		glRotatef (rotacion1, 0.0, 0.0, 1.0);
 		torito();
@@ -211,12 +211,12 @@ void GrafoParam::pala(){
 	glPushMatrix();
 		glTranslatef (0.05, 1.0, 0.0);
 		glScalef (0.1, 2.0, 0.5);
-		cubo->draw (usar_diferido, modo_vis);
+		cubo->draw (usar_diferido, modo_vis, 0);
 	glPopMatrix();
 	glPushMatrix();
 		glTranslatef (0.6, 0.05, 0.0);
 		glScalef (1.0, 0.1, 0.5);
-		cubo->draw (usar_diferido, modo_vis);
+		cubo->draw (usar_diferido, modo_vis, 0);
 	glPopMatrix();
 
 }
@@ -228,7 +228,7 @@ void GrafoParam::torito(){
 		glPushMatrix();
 			glTranslatef (0.05, 1.5, 0.0);
 			glScalef (0.1, 3.0, 0.5);
-			cubo->draw (usar_diferido, modo_vis);
+			cubo->draw (usar_diferido, modo_vis, 0);
 		glPopMatrix();
 		glTranslatef (0.0, traslacion, 0.0);
 		glPushMatrix();

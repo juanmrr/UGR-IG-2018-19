@@ -53,7 +53,9 @@ void Luz::dibujar(){
     			glMatrixMode(GL_MODELVIEW);
     			glPushMatrix();
    		//	glLoadIdentity();
-			glRotatef(rotacion, 0.0, 1.0, 0.0);
+		//	glRotatef(rotacion, 0.0, 1.0, 0.0);
+			// Originalmente rota por defecto sobre el eje y, por falta de tiempo de modificar las funciones para pasar un parámetro (eje), modifico sobre la marcha el glRotatef
+			glRotatef(rotacion, 1.0, 0.0, 0.0);
 			glLightfv (indice, GL_POSITION, (GLfloat*) &punto);
     			glPopMatrix();
 

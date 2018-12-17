@@ -36,10 +36,19 @@ Escena::Escena()
     torito = new ObjJerarquico();
     yunque = new Yunque();
     cuadro = new Cuadro();
+    dado = new Dado();
     //cuenco = new Cuenco(10, 10); //-> los parámetros son el numero de puntos del perfil y el numero de instancias a generar
+
+    // posicion, ambiente, difusa, especular
 
     luces.push_back(Luz(GL_LIGHT0, Tupla4f(0.0,0.0,1.0,0.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,1.0,1.0,1.0), Tupla4f(1.0,1.0,1.0,1.0)));
     luces.push_back(Luz(GL_LIGHT1, Tupla4f(0.0,10.0,10.0,1.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,0.0,1.0,1.0), Tupla4f(1.0,0.0,1.0,1.0)));
+
+	// luz direccional en el séptimo octante de color amarillo
+    luces.push_back(Luz(GL_LIGHT2, Tupla4f(-1.0,-1.0,1.0,0.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(1.0,1.0,0.0,1.0), Tupla4f(1.0,1.0,0.0,1.0)));
+
+	// luz posicional verde
+    luces.push_back(Luz(GL_LIGHT3, Tupla4f(10.0,-10.0,10.0,1.0), Tupla4f(0.0,0.0,0.0,1.0), Tupla4f(0.0,1.0,0.0,1.0), Tupla4f(0.0,1.0,0.0,1.0)));
 
     // .......completar: ...
     // .....
@@ -127,39 +136,42 @@ void Escena::dibujar_objeto_actual()
    switch( objeto_actual )
    {
       case 0:
-       if ( cubo != nullptr ) cubo->draw(modo, visualizacion) ;
+       if ( cubo != nullptr ) cubo->draw(modo, visualizacion, textura_activa) ;
        break ;
       case 1:
          //  ......completar un caso por cada objeto que se haya creado
-	 if (tetraedro != nullptr) tetraedro->draw(modo, visualizacion);
+	 if (tetraedro != nullptr) tetraedro->draw(modo, visualizacion, textura_activa);
 	 break;
       case 2:
-	 if (cono != nullptr) cono->draw(modo, visualizacion);
+	 if (cono != nullptr) cono->draw(modo, visualizacion, textura_activa);
 	 break;
       case 3:
-	 if (cilindro != nullptr) cilindro->draw(modo, visualizacion);
+	 if (cilindro != nullptr) cilindro->draw(modo, visualizacion, textura_activa);
 	 break;
       case 4:
-	 if (esfera != nullptr) esfera->draw(modo, visualizacion);
+	 if (esfera != nullptr) esfera->draw(modo, visualizacion, textura_activa);
 	 break;
       case 5:
-	 if (ply != nullptr) ply->draw(modo, visualizacion);
-	 else if (obj_rev != nullptr) obj_rev->draw(modo, visualizacion);
+	 if (ply != nullptr) ply->draw(modo, visualizacion, textura_activa);
+	 else if (obj_rev != nullptr) obj_rev->draw(modo, visualizacion, textura_activa);
 	 break;
 	//case 6:
 	// if (obj_jer != nullptr) obj_jer->draw(modo, visualizacion);
 	// break;
+	case 8:
+	 if (dado != nullptr) dado->draw(modo, visualizacion, textura_activa);
+	 break;
 	case 7: 
-	 if (yunque != nullptr) yunque->draw(modo, visualizacion);
+	 if (yunque != nullptr) yunque->draw(modo, visualizacion, textura_activa);
 	 break;
 	case 6:
 	 if (torito != nullptr) torito->draw(modo, visualizacion);
 	 break;
-	case 8:
-	 if (cuenco != nullptr) cuenco->draw(modo, visualizacion);
-	 break;
+	//case 8:
+	 //if (cuenco != nullptr) cuenco->draw(modo, visualizacion, textura_activa);
+	 //break;
 	case 9:
-	 if (cuadro != nullptr) cuadro->draw(modo, visualizacion);
+	 if (cuadro != nullptr) cuadro->draw(modo, visualizacion, textura_activa);
 	 break;
       default:
          cout << "draw_object: el número de objeto actual (" << objeto_actual << ") es incorrecto." << endl ;
@@ -329,9 +341,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 		obj_rev = new ObjRevolucion (nombre, num_instancias);
 	 }
 	 break;
-	case '7' :
-	 objeto_actual = 6;
-	 cout << "Objeto jerárquico" << endl;
+	//case '7' :
+	// objeto_actual = 6;
+	// cout << "Objeto jerárquico" << endl;
+	// break;
+	case '8' :
+	 objeto_actual = 8;
 	 break;
 	case 'a' :
 	 	this->conmutarAnimaciones();
@@ -371,7 +386,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 else
 		cout << "No es un objeto jerárquico" << endl;
 	break;
-	case '8' :
+	//case '8' :
 	 //objeto_actual = 7;
 	 //cout << "Objeto: yunque" << endl;
 	break;
@@ -389,7 +404,7 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	case 'k' :
 	 luces[1].activar();
 	 break;
-	case 'h' :
+	case 'g' :
 	 switch (objeto_actual)
 	 {
 		case 0: 
@@ -418,7 +433,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 			cuadro->sigMaterial();
 			break;
 	 }
-	 break;	
+	 break;
+	case 'r' :
+	 textura_activa = (textura_activa + 1) % cuadro->texturas.size();
+	 break;
+	case 'y' :
+	 luces[2].activar();
+	 break;
+	case 'u' :
+	 luces[3].activar();
+	 break;
+	case 'h' :
+	 this->conmutarAnimacionesLuz();
    }
    return false ;
 }
@@ -497,8 +523,14 @@ void Escena::mgeDesocupado(){
 		//obj_jer->actualizarEstado();
 		torito->actualizarEstado();
 	}
-	luces[1].girar();
-	glutPostRedisplay();
+	if (glIsEnabled(GL_LIGHT1)){
+		luces[1].girar();
+		glutPostRedisplay();
+	}
+	if (glIsEnabled(GL_LIGHT3)){
+		luces[3].girar();
+		glutPostRedisplay();
+	}
 }
 
 void Escena::conmutarAnimaciones(){
@@ -510,8 +542,27 @@ void Escena::conmutarAnimaciones(){
 	 		//obj_jer->inicioAnimaciones();
 	 		torito->inicioAnimaciones();
 		}
-		luces[1].inicioAnimaciones();
-	 	glutIdleFunc( funcion_desocupado );
+		if (glIsEnabled(GL_LIGHT1)){
+			luces[1].inicioAnimaciones();
+	 		glutIdleFunc( funcion_desocupado );
+		}
+		//if (glIsEnabled(GL_LIGHT3)){
+		//	luces[3].inicioAnimaciones();
+	 	//	glutIdleFunc( funcion_desocupado );
+		//}
+	 }else
+		glutIdleFunc( nullptr );
+}
+
+void Escena::conmutarAnimacionesLuz(){
+
+	 animado = !animado;
+
+	 if (animado){
+		if (glIsEnabled(GL_LIGHT3)){
+			luces[3].inicioAnimaciones();
+	 		glutIdleFunc( funcion_desocupado );
+		}
 	 }else
 		glutIdleFunc( nullptr );
 }

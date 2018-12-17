@@ -17,11 +17,15 @@ const float PI = 3.141592;
 
 ObjMallaIndexada::ObjMallaIndexada(){
 
+	// ambiente -> color sin luz
+	// difusa -> color con luz
+	// especular -> color reflejado con direccion
+
 	Tupla4f ambiente;
 	Tupla4f difusa;
 	Tupla4f especular;
 	float brillo;
-
+/*
 	ambiente = {0.1, 0.1, 0.0, 1.0};
 	difusa = {0.5, 0.5, 0.4, 1.0};
 	especular = {0.7, 0.7, 0.1, 1.0};
@@ -40,6 +44,25 @@ ObjMallaIndexada::ObjMallaIndexada(){
 	difusa = {0.5, 0.5, 0.5, 1.0};
 	especular = {0.5, 0.5, 0.5, 1.0};
 	brillo = 50.9;
+
+	materiales.push_back(Material(ambiente, difusa, especular, brillo));
+*/
+
+	// material oro
+
+	ambiente = {0.0215, 0.1745, 0.0215, 1.0};
+	difusa = {0.07568, 0.61424, 0.07568, 1.0};
+	especular = {0.633, 0.72811, 0.633, 1.0};
+	brillo = 0.6;
+
+	materiales.push_back(Material(ambiente, difusa, especular, brillo));
+
+	// material esmeralda
+
+	ambiente = {0.24725, 0.1995, 0.0745, 1.0};
+	difusa = {0.75164, 0.60648, 0.22648, 1.0};
+	especular = {0.628281, 0.555802, 0.366065, 1.0};
+	brillo = 0.4;
 
 	materiales.push_back(Material(ambiente, difusa, especular, brillo));
 
@@ -64,7 +87,7 @@ GLuint ObjMallaIndexada::CrearVBO( GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid
 
 // Visualización en modo inmediato con 'glDrawElements'
 
-void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
+void ObjMallaIndexada::draw_ModoInmediato (int visualizacion, int textura_activa)
 {
   // visualizar la malla usando glDrawElements,
   // completar (práctica 1)
@@ -86,7 +109,8 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion)
   }
 
   if (!texturas.empty()){
-	texturas[0].activar();
+	texturas[textura_activa].activar();
+  	glTexCoordPointer(2, GL_FLOAT, 0, coordenadas_texturas_vertices.data());
 	glDrawElements( GL_TRIANGLES, triangulos.size()*3, GL_UNSIGNED_INT, triangulos.data() );
       glBindTexture(GL_TEXTURE_2D, 0);
       glDisable(GL_TEXTURE_2D);
@@ -187,14 +211,14 @@ void ObjMallaIndexada::draw_ModoDiferido (int visualizacion)
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void ObjMallaIndexada::draw(int modo, int visualizacion)
+void ObjMallaIndexada::draw(int modo, int visualizacion, int textura_activa)
 {
    // completar .....(práctica 1)
    glEnable(GL_CULL_FACE); // Elimina las partes de atrás de los triángulos
 
    switch(modo){
 	case 0:
-		draw_ModoInmediato(visualizacion);
+		draw_ModoInmediato(visualizacion, textura_activa);
 		break;
 	case 1:
 		draw_ModoDiferido(visualizacion);
@@ -271,7 +295,48 @@ ObjPLY::ObjPLY( const std::string & nombre_archivo )
 		colores_default.push_back (color_default);
    	}
 
+	normalesPLY();
+
 }
+
+void ObjPLY::normalesPLY(){
+
+	calcular_normales();
+
+	Tupla3f x_positivo = {1.0, 0.0, 0.0};
+	Tupla3f x_negativo = {-1.0, 0.0, 0.0};
+	Tupla3f y_positivo = {0.0, 1.0, 0.0};
+	Tupla3f y_negativo = {0.0, -1.0, 0.0};
+	Tupla3f z_positivo = {0.0, 0.0, 1.0};
+	Tupla3f z_negativo = {0.0, 0.0, -1.0};
+
+	// miro el eje predominante y, posteriormente, si es positivo o negativo
+	// se le asocia la normal que corresponda
+
+	for (int i = 0; i < normales.size(); i++){
+		if (abs(normales[i](0)) < abs(normales[i](1))){
+			if (abs(normales[i](1)) < abs(normales[i](2))){
+				if (normales[i](2) > 0)
+					normales[i] = z_positivo;
+				else
+					normales[i] = z_negativo;
+			}
+			else{
+				if (normales[i](1) > 0)
+					normales[i] = y_positivo;
+				else
+					normales[i] = y_negativo;
+			}
+		}
+		else{
+			if (normales[i](0) > 0)
+				normales[i] = x_positivo;
+			else
+				normales[i] = x_negativo;
+		}
+	}
+}
+				
 
 // *****************************************************************************
 //

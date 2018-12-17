@@ -28,7 +28,7 @@ class ObjMallaIndexada
    ObjMallaIndexada();
 
    // dibuja el objeto en modo inmediato
-   void draw_ModoInmediato(int visualizacion);
+   void draw_ModoInmediato(int visualizacion, int textura_activa);
 
    // dibuja el objeto en modo diferido (usando VBOs)
    void draw_ModoDiferido(int visualizacion);
@@ -36,12 +36,13 @@ class ObjMallaIndexada
    // función que redibuja el objeto
    // está función llama a 'draw_MI' (modo inmediato)
    // o bien a 'draw_MD' (modo diferido, VBOs)
-   void draw(int modo, int visualizacion);
+   void draw(int modo, int visualizacion, int textura_activa);
 
    // Visualiza el siguiente material
    void sigMaterial();
 
    GLuint CrearVBO( GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram );
+   std::vector<Textura> texturas;
 
    private:
 	struct Material{
@@ -94,7 +95,7 @@ class ObjMallaIndexada
 
    int material = 0; // posición del material dentro array de materiales
 
-   std::vector<Textura> texturas;
+   std::vector<Tupla2f> coordenadas_texturas_vertices;
 
 } ;
 
@@ -111,6 +112,7 @@ class ObjPLY : public ObjMallaIndexada
 {
    public:
       ObjPLY( const std::string & nombre_archivo );
+	void normalesPLY();
 
 } ;
 

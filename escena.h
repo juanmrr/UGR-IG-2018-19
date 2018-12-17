@@ -21,6 +21,7 @@
 #include "cuenco.h"
 #include "luz.h"
 #include "cuadro.h"
+#include "dado.h"
 
 class Escena
 {
@@ -63,6 +64,7 @@ class Escena
    ObjJerarquico * torito = nullptr;
    Cuenco * cuenco = nullptr;
    Cuadro * cuadro = nullptr;
+   Dado * dado = nullptr;
    
 
    // completar: añadir punteros a tetraedro u otros (práctica 1),
@@ -77,6 +79,7 @@ class Escena
 	int tapa = 0; // 0 -> sin tapadera; 1 -> con tapadera superior; 2 -> con tapadera inferior; 3 -> con tapadera superior e inferior
 	int sombreado = 0; // 0 -> sombreado plano; 1 -> sombreado Gouroud
 	int material = 0; // posicion dentro del array de material
+	int textura_activa = 0;
 
    Escena();
 	void inicializar( int UI_window_width, int UI_window_height );
@@ -92,6 +95,7 @@ class Escena
 
    private:
 	void conmutarAnimaciones();
+	void conmutarAnimacionesLuz();
 
 
 };

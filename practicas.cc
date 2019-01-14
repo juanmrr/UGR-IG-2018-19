@@ -168,6 +168,9 @@ int main( int argc, char **argv )
 
    // TEST
 
+   //glutMouseFunc (clickRaton);
+   //glutMotionFunc (ratonMovido);
+
    // ejecutar del bucle de eventos
    glutMainLoop();
 

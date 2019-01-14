@@ -22,6 +22,7 @@
 #include "luz.h"
 #include "cuadro.h"
 #include "dado.h"
+#include "camara.h"
 
 class Escena
 {
@@ -31,6 +32,7 @@ class Escena
    Ejes ejes;
    bool animado = false;
    std::vector<Luz> luces;
+   std::vector<Camara> camaras;
 
    // variables que definen la posicion de la camara en coordenadas polares
    GLfloat Observer_distance;
@@ -74,6 +76,7 @@ class Escena
 
    public:
 
+	int camara_activa = 0;
 	int visualizacion = 0; // 0 -> modo puntos       1 -> modo aristas       2 -> modo caras	3 -> modo ajedrez
 	int modo = 0; // 0 -> modo inmediato      1 -> modo diferido
 	int tapa = 0; // 0 -> sin tapadera; 1 -> con tapadera superior; 2 -> con tapadera inferior; 3 -> con tapadera superior e inferior

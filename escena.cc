@@ -53,6 +53,9 @@ Escena::Escena()
     // .......completar: ...
     // .....
 
+    camaras.push_back(Camara({10, 10, 10}, {0, 0, 0}, {0, 1, 0}, 1, -0.5, 0.5, -0.5, 0.5, 1.1, 50.0));
+    camaras.push_back(Camara({0, 0, 20}, {0, 0, 0}, {0, 1, 0}, 0, -0.5, 0.5, -0.5, 0.5, 0.0, 50.0));
+
     num_objetos = 9 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
 }
 
@@ -269,8 +272,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	 cout << "Modo de visualización: relleno" << endl;
 	 break;
       case 'c' :
-	 visualizacion = 3;
-	 cout << "Modo de visualización: ajedrez" << endl;
+	 camara_activa = (camara_activa + 1) % camaras.size();
+	 cout << "Cámara activa número: " << camara_activa << endl;
 	 break;
 	case 't' :
 	 tapa = (tapa + 1) % 4;
@@ -455,22 +458,27 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         Observer_angle_y-- ;
+         camaras[camara_activa].rotarYExaminar(-5.0) ;
+         //Observer_angle_y-- ;
          break;
 	   case GLUT_KEY_RIGHT:
-         Observer_angle_y++ ;
+         camaras[camara_activa].rotarYExaminar(5.0) ;
+         //Observer_angle_y++ ;
          break;
 	   case GLUT_KEY_UP:
-         Observer_angle_x-- ;
+         camaras[camara_activa].rotarXExaminar(5.0) ;
          break;
 	   case GLUT_KEY_DOWN:
-         Observer_angle_x++ ;
+         camaras[camara_activa].rotarXExaminar(-5.0) ;
+         //Observer_angle_x++ ;
          break;
 	   case GLUT_KEY_PAGE_UP:
-         Observer_distance *=1.2 ;
+	   camaras[camara_activa].zoom(1.2);
+         //Observer_distance *=1.2 ;
          break;
 	   case GLUT_KEY_PAGE_DOWN:
-         Observer_distance /= 1.2 ;
+	   camaras[camara_activa].zoom(-1.2);
+         //Observer_distance /= 1.2 ;
          break;
 	}
 
@@ -484,14 +492,14 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
 //
 //***************************************************************************
 
-void Escena::change_projection( const float ratio_xy )
+/*void Escena::change_projection( const float ratio_xy )
 {
    glMatrixMode( GL_PROJECTION );
    glLoadIdentity();
    const float wy = 0.84*Front_plane,
    wx = ratio_xy*wy ;
    glFrustum( -wx, +wx, -wy, +wy, Front_plane, Back_plane );
-}
+}*/
 //**************************************************************************
 // Funcion que se invoca cuando cambia el tamaño de la ventana
 //***************************************************************************
@@ -500,7 +508,8 @@ void Escena::redimensionar( int newWidth, int newHeight )
 {
    Width = newWidth;
    Height = newHeight;
-   change_projection( float(Width)/float(Height) );
+   //change_projection( float(Width)/float(Height) );
+   camaras[camara_activa].redimensionar(newWidth, newHeight);
    glViewport( 0, 0, Width, Height );
 }
 
@@ -513,9 +522,8 @@ void Escena::change_observer()
    // posicion del observador
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-   glTranslatef( 0.0, 0.0, -Observer_distance );
-   glRotatef( Observer_angle_x, 1.0 ,0.0, 0.0 );
-   glRotatef( Observer_angle_y, 0.0, 1.0, 0.0 );
+   camaras[camara_activa].setProyeccion();
+   camaras[camara_activa].setObserver();
 }
 
 void Escena::mgeDesocupado(){

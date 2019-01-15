@@ -53,7 +53,7 @@ Escena::Escena()
     // .......completar: ...
     // .....
 
-    camaras.push_back(Camara({10, 10, 10}, {0, 0, 0}, {0, 1, 0}, 1, -0.5, 0.5, -0.5, 0.5, 1.1, 50.0));
+    camaras.push_back(Camara({0, 0, 10}, {0, 0, 0}, {0, 1, 0}, 1, -0.5, 0.5, -0.5, 0.5, 1.1, 50.0));
     camaras.push_back(Camara({0, 0, 20}, {0, 0, 0}, {0, 1, 0}, 0, -0.5, 0.5, -0.5, 0.5, 0.0, 50.0));
 
     num_objetos = 9 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
@@ -446,8 +446,8 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
 	case 'u' :
 	 luces[3].activar();
 	 break;
-	case 'h' :
-	 this->conmutarAnimacionesLuz();
+	//case 'h' :
+	 //this->conmutarAnimacionesLuz();
    }
    return false ;
 }
@@ -458,18 +458,18 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
    switch ( Tecla1 )
    {
 	   case GLUT_KEY_LEFT:
-         camaras[camara_activa].rotarYExaminar(-5.0) ;
+         camaras[camara_activa].rotarYExaminar(-3.0) ;
          //Observer_angle_y-- ;
          break;
 	   case GLUT_KEY_RIGHT:
-         camaras[camara_activa].rotarYExaminar(5.0) ;
+         camaras[camara_activa].rotarYExaminar(3.0) ;
          //Observer_angle_y++ ;
          break;
 	   case GLUT_KEY_UP:
-         camaras[camara_activa].rotarXExaminar(5.0) ;
+         camaras[camara_activa].rotarXExaminar(3.0) ;
          break;
 	   case GLUT_KEY_DOWN:
-         camaras[camara_activa].rotarXExaminar(-5.0) ;
+         camaras[camara_activa].rotarXExaminar(-3.0) ;
          //Observer_angle_x++ ;
          break;
 	   case GLUT_KEY_PAGE_UP:
@@ -539,6 +539,9 @@ void Escena::mgeDesocupado(){
 		luces[3].girar();
 		glutPostRedisplay();
 	}
+	
+	camaras[camara_activa].girar();
+	glutPostRedisplay();
 }
 
 void Escena::conmutarAnimaciones(){
@@ -558,20 +561,22 @@ void Escena::conmutarAnimaciones(){
 		//	luces[3].inicioAnimaciones();
 	 	//	glutIdleFunc( funcion_desocupado );
 		//}
+		camaras[camara_activa].inicioAnimaciones();
+		glutIdleFunc( funcion_desocupado );
 	 }else
 		glutIdleFunc( nullptr );
 }
-
+/*
 void Escena::conmutarAnimacionesLuz(){
 
 	 animado = !animado;
 
 	 if (animado){
 		if (glIsEnabled(GL_LIGHT3)){
-			luces[3].inicioAnimaciones();
+			//luces[3].inicioAnimaciones();
 	 		glutIdleFunc( funcion_desocupado );
 		}
 	 }else
 		glutIdleFunc( nullptr );
 }
-
+*/

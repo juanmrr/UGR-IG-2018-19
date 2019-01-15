@@ -20,7 +20,7 @@ Camara::Camara (Tupla3f eye, Tupla3f at, Tupla3f up, int tipo, float left, float
 
 void Camara::rotarXExaminar (float angle){
 
-	std::cout << "eye original :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
+	//std::cout << "eye original :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
 	Tupla3f n, u, v, vup, xd;
 
@@ -28,42 +28,52 @@ void Camara::rotarXExaminar (float angle){
 
 	float x, y, z, s;
 
+	// Calcular el eje n (el z de la cámara)
 	n = eye - at;
 
 	modulo_n = sqrt(n(0)*n(0) + n(1)*n(1) + n(2)*n(2));
 
+	// Normalizar
 	n = {n(0)/modulo_n, n(1)/modulo_n, n(2)/modulo_n};
 
-	std::cout << "eje z: " << n(0) << "," << n(1) << "," << n(2) << std::endl;
+	//std::cout << "eje z: " << n(0) << "," << n(1) << "," << n(2) << std::endl;
 
+	// Calcular el viewUp
 	vup = up - at;
 
+	// Calcular u (eje x de la cámara) mediante el producto vectorial de VPN (n) y viewUp
 	u = {vup(1) * n(2) - vup(2) * n(1), vup(2) * n(0) - vup(0) * n(2), vup(0) * n(1) - vup(1) * n(0)};
 
 	modulo_u = sqrt(u(0)*u(0) + u(1)*u(1) + u(2)*u(2));
 
+	// Normalizar
 	u = {u(0)/modulo_u, u(1)/modulo_u, u(2)/modulo_u};
 
-	std::cout << "eje x: " << u(0) << "," << u(1) << "," << u(2) << std::endl;
+	//std::cout << "eje x: " << u(0) << "," << u(1) << "," << u(2) << std::endl;
 
+	// Calcular v (eje y de la cámara) mediante el producto vectorial de n y u (z y x de la cámara)
 	v = {n(1) * u(2) - n(2) * u(1), n(2) * u (0) - n(0) * u(2), n(0) * u(1) - n(1) * u(0)};
 
 	modulo_v = sqrt(v(0)*v(0) + v(1)*v(1) + v(2)*v(2));
 
+	// Normalizar
 	v = {v(0)/modulo_v, v(1)/modulo_v, v(2)/modulo_v};
 
-	std::cout << "eje y: " << v(0) << "," << v(1) << "," << v(2) << std::endl;
+	//std::cout << "eje y: " << v(0) << "," << v(1) << "," << v(2) << std::endl;
 
+	// Matriz de vista (alinear ejes de la cámara a los del mundo y la cámara respecto al origen)
 	eye = {producto_escalar(-eye, u, 3), producto_escalar(-eye, v, 3), producto_escalar(-eye, n, 3)};
 
 	//std::cout << "eye escalar :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
+	// Calcular y realizar el giro pertinente
 	float hip = sqrt(eye(1)*eye(1) + eye(2)*eye(2));
 
-	eye = {eye(0), sin(angle*PI/180)*hip, cos(angle*PI/180)*hip};
+	eye = {eye(0), (float)sin(angle*PI/180)*hip, (float)cos(angle*PI/180)*hip};
 
-	std::cout << "eye en el origen :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
+	//std::cout << "eye en el origen :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
+	// Ecuaciones para calcular las nuevas coordenadas de la cámara en el mundo
 	s = u(0) * v(1) * n(2) + u(1) * v(2) * n(0) + u(2) * v(0) * n(1) - (u(2) * v(1) * n(0) + u(1) * v(0) * n(2) + u(0) * v(2) * n(1));
 
 	x = eye(0) * v(1) * n(2) + u(1) * v(2) * eye(2) + u(2) * eye(1) * n(1) - (u(2) * v(1) * eye(2) + u(1) * eye(1) * n(2) + eye(0) * v(2) * n(1));
@@ -80,14 +90,18 @@ void Camara::rotarXExaminar (float angle){
 
 	eye = {x, y, z};
 
-	std::cout << "eye final " << x << "," << y << "," << z << std::endl;
+	//std::cout << "eye final " << x << "," << y << "," << z << std::endl;
 
+	// Cálculo análogo al de la posición de la cámara
+	// Se busca que el vector del viewUp mantenga el ángulo respecto a VPN de la cámara
 	up = {producto_escalar(-up, u, 3), producto_escalar(-up, v, 3), producto_escalar(-up, n, 3)};
 
+	// Cálculo del giro
 	hip = sqrt(up(1)*up(1) + up(2)*up(2));
 
-	up = {up(0), cos(angle*PI/180)*hip, sin(angle*PI/180)*hip};
+	up = {up(0), (float)cos(angle*PI/180)*hip, (float)sin(angle*PI/180)*hip};
 
+	// Nuevas coordenadas del vector viewUp
       s = u(0) * v(1) * n(2) + u(1) * v(2) * n(0) + u(2) * v(0) * n(1) - (u(2) * v(1) * n(0) + u(1) * v(0) * n(2) + u(0) * v(2) * n(1));
 
 	x = up(0) * v(1) * n(2) + u(1) * v(2) * up(2) + u(2) * up(1) * n(1) - (u(2) * v(1) * up(2) + u(1) * up(1) * n(2) + up(0) * v(2) * n(1));
@@ -102,17 +116,18 @@ void Camara::rotarXExaminar (float angle){
 
 	z = z/s;
 
+	// Normalizar
 	float up_normal = sqrt(x*x + y*y + z*z);
 
 	up = {x/up_normal, y/up_normal, z/up_normal};
 
-	std::cout << "up final " << x << "," << y << "," << z << std::endl;
+	//std::cout << "up final " << x << "," << y << "," << z << std::endl;
 
 }
 
 void Camara::rotarYExaminar (float angle){
 
-	std::cout << "eye original :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
+	//std::cout << "eye original :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
 	Tupla3f n, u, v, vup, xd;
 
@@ -126,7 +141,7 @@ void Camara::rotarYExaminar (float angle){
 
 	n = {n(0)/modulo_n, n(1)/modulo_n, n(2)/modulo_n};
 
-	std::cout << "eje z: " << n(0) << "," << n(1) << "," << n(2) << std::endl;
+	//std::cout << "eje z: " << n(0) << "," << n(1) << "," << n(2) << std::endl;
 
 	vup = up - at;
 
@@ -136,7 +151,7 @@ void Camara::rotarYExaminar (float angle){
 
 	u = {u(0)/modulo_u, u(1)/modulo_u, u(2)/modulo_u};
 
-	std::cout << "eje x: " << u(0) << "," << u(1) << "," << u(2) << std::endl;
+	//std::cout << "eje x: " << u(0) << "," << u(1) << "," << u(2) << std::endl;
 
 	v = {n(1) * u(2) - n(2) * u(1), n(2) * u (0) - n(0) * u(2), n(0) * u(1) - n(1) * u(0)};
 
@@ -144,7 +159,7 @@ void Camara::rotarYExaminar (float angle){
 
 	v = {v(0)/modulo_v, v(1)/modulo_v, v(2)/modulo_v};
 
-	std::cout << "eje y: " << v(0) << "," << v(1) << "," << v(2) << std::endl;
+	//std::cout << "eje y: " << v(0) << "," << v(1) << "," << v(2) << std::endl;
 
 	eye = {producto_escalar(-eye, u, 3), producto_escalar(-eye, v, 3), producto_escalar(-eye, n, 3)};
 
@@ -152,9 +167,9 @@ void Camara::rotarYExaminar (float angle){
 
 	float hip = sqrt(eye(1)*eye(1) + eye(2)*eye(2));
 
-	eye = {sin(angle*PI/180)*hip, eye(1), cos(angle*PI/180)*hip};
+	eye = {(float)sin(angle*PI/180)*hip, eye(1), (float)cos(angle*PI/180)*hip};
 
-	std::cout << "eye en el origen :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
+	//std::cout << "eye en el origen :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
 	s = u(0) * v(1) * n(2) + u(1) * v(2) * n(0) + u(2) * v(0) * n(1) - (u(2) * v(1) * n(0) + u(1) * v(0) * n(2) + u(0) * v(2) * n(1));
 
@@ -172,13 +187,13 @@ void Camara::rotarYExaminar (float angle){
 
 	eye = {x, y, z};
 
-	std::cout << "eye final " << x << "," << y << "," << z << std::endl;
+	//std::cout << "eye final " << x << "," << y << "," << z << std::endl;
 
 	up = {producto_escalar(up, u, 3), producto_escalar(up, v, 3), producto_escalar(up, n, 3)};
 
 	hip = sqrt(up(1)*up(1) + up(2)*up(2));
 
-	up = {sin(angle*PI/180)*hip, up(1), cos(angle*PI/180)*hip};
+	up = {(float)sin(angle*PI/180)*hip, up(1), (float)cos(angle*PI/180)*hip};
 
       s = u(0) * v(1) * n(2) + u(1) * v(2) * n(0) + u(2) * v(0) * n(1) - (u(2) * v(1) * n(0) + u(1) * v(0) * n(2) + u(0) * v(2) * n(1));
 
@@ -198,7 +213,7 @@ void Camara::rotarYExaminar (float angle){
 
 	up = {x/up_normal, y/up_normal, z/up_normal};
 
-	std::cout << "up final " << x << "," << y << "," << z << std::endl;
+	//std::cout << "up final " << x << "," << y << "," << z << std::endl;
 
 }
 
@@ -273,5 +288,22 @@ void Camara::redimensionar(int newWidth, int newHeight){
    this->bottom = -this->top;
    this->right = newWidth/newHeight * this->top;
    this->left = -this->right;
+
+}
+
+void Camara::inicioAnimaciones( )
+{
+   using namespace std::chrono ;
+   ultima_actu = steady_clock::now() ;
+}
+
+void Camara::girar(){
+
+   using namespace std::chrono ;
+
+   const Instante   ahora       =  steady_clock::now();
+   const Duracion_s duracion_s  =  ahora - ultima_actu;
+   ultima_actu = ahora ;
+   rotarYExaminar(duracion_s.count() * 100);
 
 }

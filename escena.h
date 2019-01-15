@@ -98,7 +98,7 @@ class Escena
 
    private:
 	void conmutarAnimaciones();
-	void conmutarAnimacionesLuz();
+	//void conmutarAnimacionesLuz();
 
 
 };

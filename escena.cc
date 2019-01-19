@@ -65,7 +65,7 @@ Escena::Escena()
     // .......completar: ...
     // .....
 
-    camaras.push_back(Camara({20, 20, 20}, {0, 0, 0}, {0, 1, 0}, 1, -0.5, 0.5, -0.5, 0.5, 0.1, 40.0));
+    camaras.push_back(Camara({0, 20, 0}, {0, 0, 0}, {1, 0, 0}, 1, -0.5, 0.5, -0.5, 0.5, 0.1, 40.0));
     camaras.push_back(Camara({0, 0, 20}, {0, 0, 0}, {0, 1, 0}, 0, -0.5, 0.5, -0.5, 0.5, 0.0, 40.0));
 
     num_objetos = 7 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
@@ -645,58 +645,58 @@ void Escena::colocar_escena(){
   glPushMatrix();
      //glTranslatef(0.0,-0.4,0.0);
      glPushMatrix();
-     glScalef(2.6,2.6,2.6);
-     glTranslatef(0.8,0.0,-0.6);
+     //glScalef(2.6,2.6,2.6);
+     cono_sel->trasladar(0.8,0.0,-0.6);
      cono_sel->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix();      
 
      glPushMatrix(); 
-     glTranslatef(-1.9,1.0,1.2);
+     esfera_sel_1->trasladar(-3.9,1.0,1.5);
      esfera_sel_1->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix();
 
      glPushMatrix();
-     glScalef(0.3,0.3,0.3); 
-     glTranslatef(-1.0,1.0,1.2);
+     //glScalef(0.3,0.3,0.3); 
+     esfera_sel_2->trasladar(-1.0,1.0,1.2);
      esfera_sel_2->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix(); 
 
      glPushMatrix();
-     glScalef(0.6,0.6,0.6);
-     glTranslatef(-2.0,5.0,-2.0);
+     //glScalef(0.6,0.6,0.6);
+     esfera_sel_3->trasladar(-2.0,5.0,-2.0);
      esfera_sel_3->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix(); 
      
      glPushMatrix();
-     glTranslatef(1.2,0.5,1.4);
-     glRotatef(60.0,0.0,1.0,1.0);
+     cubo_sel->trasladar(1.2,0.5,1.4);
+     //glRotatef(60.0,0.0,1.0,1.0);
      cubo_sel->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix();
 
      glPushMatrix(); 
-     glScalef(0.6,0.6,0.6);
-     glTranslatef(-0.8,0.0,-0.7);
+     //glScalef(0.6,0.6,0.6);
+     cilindro_sel_1->trasladar(-0.8,0.0,-0.7);
      cilindro_sel_1->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix(); 
 
      glPushMatrix();
-     glTranslatef(-2.5,1.0,-2.3);
-     glRotatef(50.0,0.0,1.0,0.0);
-     glRotatef(70.0,0.0,0.0,1.0);
+     cilindro_sel_2->trasladar(-2.5,1.0,-2.3);
+     //glRotatef(50.0,0.0,1.0,0.0);
+     //glRotatef(70.0,0.0,0.0,1.0);
      cilindro_sel_2->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix(); 
 
      glPushMatrix();
-     glScalef(0.8,0.4,0.8);
-     glTranslatef(-1.3,0.0,-2.3);
+     //glScalef(0.8,0.4,0.8);
+     cilindro_sel_3->trasladar(-1.3,0.0,-2.3);
      cilindro_sel_3->draw(modo, visualizacion, textura_activa, 0);
      glPopMatrix(); 
 
      glPushMatrix(); 
-     glScalef(0.8,0.8,0.8);
-     glTranslatef(-2.8,0.0,-1.0);
+     //glScalef(0.8,0.8,0.8);
+     cilindro_sel_4->trasladar(-2.8,0.0,-1.0);
      cilindro_sel_4->draw(modo, visualizacion, textura_activa, 0);
-     glPopMatrix(); 
+     glPopMatrix();
  
    glPopMatrix();
 
@@ -706,59 +706,59 @@ void Escena::draw_trasero(){
 
   glPushMatrix();
      glPushMatrix();
-     glScalef(2.6,2.6,2.6);
+     //glScalef(2.6,2.6,2.6);
      glTranslatef(0.8,0.0,-0.6);
      cono_sel->draw_back();
      glPopMatrix();      
 
      glPushMatrix(); 
-     glTranslatef(-1.9,1.0,1.2);
+     glTranslatef(-3.9,1.0,1.5);
      esfera_sel_1->draw_back();
      glPopMatrix();
 
      glPushMatrix();
-     glScalef(0.3,0.3,0.3); 
+     //glScalef(0.3,0.3,0.3); 
      glTranslatef(-1.0,1.0,1.2);
      esfera_sel_2->draw_back();
      glPopMatrix(); 
 
      glPushMatrix();
-     glScalef(0.6,0.6,0.6);
+     //glScalef(0.6,0.6,0.6);
      glTranslatef(-2.0,5.0,-2.0);
      esfera_sel_3->draw_back();
      glPopMatrix(); 
      
      glPushMatrix();
      glTranslatef(1.2,0.5,1.4);
-     glRotatef(60.0,0.0,1.0,1.0);
+     //glRotatef(60.0,0.0,1.0,1.0);
      cubo_sel->draw_back();
      glPopMatrix();
 
      glPushMatrix(); 
-     glScalef(0.6,0.6,0.6);
+     //glScalef(0.6,0.6,0.6);
      glTranslatef(-0.8,0.0,-0.7);
      cilindro_sel_1->draw_back();
      glPopMatrix(); 
 
      glPushMatrix();
      glTranslatef(-2.5,1.0,-2.3);
-     glRotatef(50.0,0.0,1.0,0.0);
-     glRotatef(70.0,0.0,0.0,1.0);
+     //glRotatef(50.0,0.0,1.0,0.0);
+     //glRotatef(70.0,0.0,0.0,1.0);
      cilindro_sel_2->draw_back();
      glPopMatrix(); 
 
      glPushMatrix();
-     glScalef(0.8,0.4,0.8);
+     //glScalef(0.8,0.4,0.8);
      glTranslatef(-1.3,0.0,-2.3);
      cilindro_sel_3->draw_back();
      glPopMatrix(); 
 
      glPushMatrix(); 
-     glScalef(0.8,0.8,0.8);
+     //glScalef(0.8,0.8,0.8);
      glTranslatef(-2.8,0.0,-1.0);
      cilindro_sel_4->draw_back();
-     glPopMatrix(); 
- 
+     glPopMatrix();
+
    glPopMatrix();
 
 }
@@ -771,7 +771,7 @@ Tupla3ub Escena::leer_pixel(GLint x, GLint y){
 	int pixel[3];
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
-	glReadBuffer(GL_BACK);
+	//glReadBuffer(GL_BACK);
 	glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB,GL_UNSIGNED_INT, (GLubyte *) &pixel[0]);
 
 	for(int i = 0; i < 3; i++)
@@ -787,58 +787,94 @@ void Escena::seleccionar(Tupla3ub pixel){
 
 	switch (color){
 		case 20:
-			if (cubo_sel->getSeleccionado())
+			if (cubo_sel->getSeleccionado()){
 				cubo_sel->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({cubo_sel->getOrigen()});
+			}
+			else{
 				cubo_sel->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo(cubo_sel->getCentro());
+			}
 		break;
 		case 40:
-			if (cono_sel->getSeleccionado())
+			if (cono_sel->getSeleccionado()){
 				cono_sel->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({cono_sel->getOrigen()});
+			}
+			else{
 				cono_sel->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo(cono_sel->getCentro());
+			}
 		break;
 		case 60:
-			if (cilindro_sel_1->getSeleccionado())
+			if (cilindro_sel_1->getSeleccionado()){
 				cilindro_sel_1->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({cilindro_sel_1->getOrigen()});
+			}
+			else{
 				cilindro_sel_1->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo({cilindro_sel_1->getCentro()});
+			}
 		break;
 		case 80:
-			if (cilindro_sel_2->getSeleccionado())
+			if (cilindro_sel_2->getSeleccionado()){
 				cilindro_sel_2->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({cilindro_sel_2->getOrigen()});
+			}
+			else{
 				cilindro_sel_2->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo({cilindro_sel_2->getCentro()});
+			}
 		break;
 		case 100:
-			if (cilindro_sel_3->getSeleccionado())
+			if (cilindro_sel_3->getSeleccionado()){
 				cilindro_sel_3->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({cilindro_sel_3->getOrigen()});
+			}
+			else{
 				cilindro_sel_3->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo({cilindro_sel_3->getCentro()});
+			}
 		break;
 		case 120:
-			if (cilindro_sel_4->getSeleccionado())
+			if (cilindro_sel_4->getSeleccionado()){
 				cilindro_sel_4->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({cilindro_sel_4->getOrigen()});
+			}
+			else{
 				cilindro_sel_4->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo({cilindro_sel_4->getCentro()});
+			}
 		break;
 		case 140:
-			if (esfera_sel_1->getSeleccionado())
+			if (esfera_sel_1->getSeleccionado()){
 				esfera_sel_1->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({esfera_sel_1->getOrigen()});
+			}
+			else{
 				esfera_sel_1->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo({esfera_sel_1->getCentro()});
+			}
 		break;
 		case 160:
-			if (esfera_sel_2->getSeleccionado())
+			if (esfera_sel_2->getSeleccionado()){
 				esfera_sel_2->setSeleccionado(false);
-			else
+				camaras[camara_activa].setObjetivo({esfera_sel_2->getOrigen()});
+			}
+			else{
 				esfera_sel_2->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo({esfera_sel_2->getCentro()});
+			}
 		break;
 		case 180:
-			if (esfera_sel_3->getSeleccionado())
+			if (esfera_sel_3->getSeleccionado()){
 				esfera_sel_3->setSeleccionado(false);
-			else
-				esfera_sel_3->setSeleccionado(true);;
+				camaras[camara_activa].setObjetivo({esfera_sel_3->getOrigen()});
+			}
+			else{
+				esfera_sel_3->setSeleccionado(true);
+				camaras[camara_activa].setObjetivo({esfera_sel_3->getCentro()});
+			}
 		break;
 	}
 

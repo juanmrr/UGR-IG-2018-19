@@ -47,9 +47,14 @@ class ObjMallaIndexada
 
    GLuint CrearVBO( GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram );
    std::vector<Textura> texturas;
+   Tupla3f origen;
+   Tupla3f centro;
 
    void setSeleccionado(bool seleccionado);
    bool getSeleccionado();
+   void trasladar(float x, float y, float z);
+   Tupla3f getOrigen();
+   Tupla3f getCentro();
 
    private:
 	struct Material{

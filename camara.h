@@ -42,6 +42,7 @@ class Camara {
 	void redimensionar ( int newWidth, int newHeight );
 	void inicioAnimaciones();
 	void girar();
+	void setObjetivo(Tupla3f objetivo);
 };
 
 #endif

@@ -13,6 +13,8 @@ class Tetraedro : public ObjMallaIndexada{
 
 	   Tetraedro(int r, int g, int b){
 
+	    origen = {0.0, 0.0, 0.0};
+
 	   // inicializar la tabla de vértices
 	    vertices = {  { -0.5, -0.5, -0.5 },
 			  { +0.5, -0.5, -0.5 },

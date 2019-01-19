@@ -13,12 +13,14 @@ class Cono : public ObjRevolucion {
 
   private:
 
-	Tupla3f origen = {0.0, 0.0, 0.0};
+	//Tupla3f origen = {0.0, 0.0, 0.0};
 
   public:
 
 	Cono (float radio, float altura, int num_puntos_perf, int num_instancias, int tapa, int r, int g, int b){
 
+		origen = {0.0, 0.0, 0.0};
+	
 		Tupla3f vertice;
 		float x, y, z;
 		

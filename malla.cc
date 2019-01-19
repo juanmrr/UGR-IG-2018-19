@@ -594,16 +594,21 @@ void ObjMallaIndexada::setColor(int r, int g, int b){
 
 	float r_rand, g_rand, b_rand;
 
-	r_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	g_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	b_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	//r_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	//g_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	//b_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-	Tupla3f color_default = {r_rand, g_rand, b_rand};
+	//Tupla3f color_default = {r_rand, g_rand, b_rand};
 	Tupla3f color_secundario = {0.3, 0.3, 0.6};
 	Tupla3ub color_back = {r, g, b};
 	Tupla3f color_seleccion = {1.0, 1.0, 0.0};
 
 	for (int i = 0; i < vertices.size(); i++){
+	r_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	g_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	b_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	Tupla3f color_default = {r_rand, g_rand, b_rand};
 		colores[0].push_back(color_default);
 		colores[1].push_back(color_secundario);
 		colores[2].push_back(color_seleccion);
@@ -621,5 +626,25 @@ void ObjMallaIndexada::setSeleccionado(bool seleccionado){
 bool ObjMallaIndexada::getSeleccionado(){
 
 	return seleccionado;
+
+}
+
+
+void ObjMallaIndexada::trasladar(float x, float y, float z){
+
+	glTranslatef(x, y, z);
+	centro = {origen(0) + x, origen(1) + y, origen(2) + z};
+	
+}
+
+Tupla3f ObjMallaIndexada::getOrigen(){
+
+	return origen;
+
+}
+
+Tupla3f ObjMallaIndexada::getCentro(){
+
+	return centro;
 
 }

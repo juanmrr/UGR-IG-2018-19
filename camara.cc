@@ -301,3 +301,9 @@ void Camara::girar(){
    rotarYExaminar(duracion_s.count() * 100);
 
 }
+
+void Camara::setObjetivo(Tupla3f objetivo){
+
+	at = objetivo;
+	std::cout << at(0) << " " << at(1) << " " << at(2) << std::endl;
+}

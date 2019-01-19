@@ -14,11 +14,13 @@ class Esfera : public ObjRevolucion{
   private:
 	
 	const float PI = 3.14159265;
-	Tupla3f origen = {0.0, 0.0, 0.0};
+	//Tupla3f origen = {0.0, 0.0, 0.0};
 
   public:
 
 	Esfera (float radio, int num_puntos_perf, int num_instancias, int tapa, float r, float g, float b){
+
+		origen = {0.0, 0.0, 0.0};
 
 		Tupla3f vertice;
 		float x, y, z;

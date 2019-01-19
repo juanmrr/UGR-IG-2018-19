@@ -11,7 +11,7 @@ class Tetraedro : public ObjMallaIndexada{
 
    public:
 
-	   Tetraedro(){
+	   Tetraedro(int r, int g, int b){
 
 	   // inicializar la tabla de vértices
 	    vertices = {  { -0.5, -0.5, -0.5 },
@@ -30,18 +30,13 @@ class Tetraedro : public ObjMallaIndexada{
 		else
 			triangulos_par.push_back(triangulos[i]);
 
-	   Tupla3f color_default = {0, 0, 0};
-	   Tupla3f color_secundario = {0.5, 0.5, 0};
-
-	   for (int i = 0; i < vertices.size(); i++){
-			colores_default.push_back(color_default);
-			colores_secundario.push_back(color_secundario);
-	   }
+	setColor(r, g, b);
 
 	calcular_normales();
 
+   	}
 
-   }
+	Tetraedro() : Tetraedro(0, 0, 0) {};
 
 };
 

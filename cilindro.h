@@ -17,7 +17,7 @@ class Cilindro : public ObjRevolucion{
 
   public:
 
-	Cilindro(float radio, float altura, int num_puntos_perf, int num_instancias, int tapa){
+	Cilindro(float radio, float altura, int num_puntos_perf, int num_instancias, int tapa, int r, int g, int b){
 
 		Tupla3f vertice;
 		float x, y, z;
@@ -30,14 +30,14 @@ class Cilindro : public ObjRevolucion{
 			vertices_originales.push_back(vertice);
 		}
 
-		crearMalla (vertices_originales, num_instancias, tapa);
+		crearMalla (vertices_originales, num_instancias, tapa, r, g, b);
 
 	}
 
-	Cilindro(int num_puntos_perf, int num_instancias) : Cilindro (0.5, 1, num_puntos_perf, num_instancias, 3) {}
+	Cilindro(int num_puntos_perf, int num_instancias) : Cilindro (0.5, 2.5, num_puntos_perf, num_instancias, 3, 0, 0, 0) {}
 
 
-	Cilindro(int num_puntos_perf, int num_instancias, int tapa) : Cilindro (0.5, 1, num_puntos_perf, num_instancias, tapa) {}
+	Cilindro(int num_puntos_perf, int num_instancias, int tapa) : Cilindro (0.5, 2.5, num_puntos_perf, num_instancias, tapa, 0, 0, 0) {}
 
 };
 

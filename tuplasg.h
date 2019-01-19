@@ -190,20 +190,21 @@ class TuplaG4 : public TuplaG<T,4>
 // *********************************************************************
 // tipos concretos:
 
-typedef TuplaG2<float>  Tupla2f ;
-typedef TuplaG2<double> Tupla2d ;
-typedef TuplaG2<uint>   Tupla2u ;
-typedef TuplaG2<int>    Tupla2i ;
+typedef TuplaG2<float>  		Tupla2f ;
+typedef TuplaG2<double> 		Tupla2d ;
+typedef TuplaG2<uint>   		Tupla2u ;
+typedef TuplaG2<int>    		Tupla2i ;
 
-typedef TuplaG3<float>  Tupla3f ;
-typedef TuplaG3<double> Tupla3d ;
-typedef TuplaG3<uint>   Tupla3u ;
-typedef TuplaG3<int>    Tupla3i ;
+typedef TuplaG3<float>  		Tupla3f ;
+typedef TuplaG3<double> 		Tupla3d ;
+typedef TuplaG3<uint>   		Tupla3u ;
+typedef TuplaG3<int>    		Tupla3i ;
+typedef TuplaG3<unsigned char> 	Tupla3ub;
 
-typedef TuplaG4<float>  Tupla4f ;
-typedef TuplaG4<double> Tupla4d ;
-typedef TuplaG4<int>    Tupla4i ;
-typedef TuplaG4<uint>   Tupla4u ;
+typedef TuplaG4<float>  		Tupla4f ;
+typedef TuplaG4<double> 		Tupla4d ;
+typedef TuplaG4<int>    		Tupla4i ;
+typedef TuplaG4<uint>   		Tupla4u ;
 
 
 

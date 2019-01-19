@@ -28,7 +28,7 @@ class ObjMallaIndexada
    ObjMallaIndexada();
 
    // dibuja el objeto en modo inmediato
-   void draw_ModoInmediato(int visualizacion, int textura_activa);
+   void draw_ModoInmediato(int visualizacion, int textura_activa, int color);
 
    // dibuja el objeto en modo diferido (usando VBOs)
    void draw_ModoDiferido(int visualizacion);
@@ -36,13 +36,20 @@ class ObjMallaIndexada
    // función que redibuja el objeto
    // está función llama a 'draw_MI' (modo inmediato)
    // o bien a 'draw_MD' (modo diferido, VBOs)
-   void draw(int modo, int visualizacion, int textura_activa);
+   void draw(int modo, int visualizacion, int textura_activa, int color);
+
+   void draw_back ();
 
    // Visualiza el siguiente material
    void sigMaterial();
 
+   void setColor( int r, int g, int b);
+
    GLuint CrearVBO( GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid * puntero_ram );
    std::vector<Textura> texturas;
+
+   void setSeleccionado(bool seleccionado);
+   bool getSeleccionado();
 
    private:
 	struct Material{
@@ -77,8 +84,8 @@ class ObjMallaIndexada
    std::vector<Tupla3i> triangulos_par ; // una terna de 3 enteros por cada cara o triángulo par -> modo ajedrez
    std::vector<Tupla3i> triangulos_impar ; // una terna de 3 enteros por cada cara o triángulo impar -> modo ajedrez
 
-   std::vector<Tupla3f> colores_default ;    // array de colores con un color por defecto (0,0,0)
-   std::vector<Tupla3f> colores_secundario ;    // array de colores secundario para el modo ajedrez
+   std::vector<std::vector<Tupla3f> >colores = std::vector<std::vector<Tupla3f> > (3);    // array de colores con un color por defecto (0,0,0)
+   std::vector<Tupla3ub> colores_back;
 
    std::vector<Tupla3f> normales ; // array con las normales de los vértices
    std::vector<Tupla3f> normales_triangulos ; // array con las normales de los triangulos
@@ -97,6 +104,8 @@ class ObjMallaIndexada
 
    std::vector<Tupla2f> coordenadas_texturas_vertices;
 
+   bool seleccionado = false;
+
 } ;
 
 // *****************************************************************************
@@ -111,7 +120,8 @@ class ObjMallaIndexada
 class ObjPLY : public ObjMallaIndexada
 {
    public:
-      ObjPLY( const std::string & nombre_archivo );
+      ObjPLY( const std::string & nombre_archivo, int r, int g, int b );
+	ObjPLY( const std::string & nombre_archivo) : ObjPLY(nombre_archivo, 0, 0, 0) {};
 	void normalesPLY();
 
 } ;
@@ -127,7 +137,7 @@ class ObjRevolucion : public ObjMallaIndexada
 	ObjRevolucion( const std::string & nombre_ply_perfil, const int num_instancias, const int tapa );
 
    protected:
-      void crearMalla( const std::vector<Tupla3f> & perfil_original, const int num_instancias_perf, const int tapa);
+      void crearMalla( const std::vector<Tupla3f> & perfil_original, const int num_instancias_perf, const int tapa, int r, int g, int b);
 
    private:
 	void crearTapa (const int tapa, const int M, const int N);

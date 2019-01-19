@@ -18,7 +18,7 @@ class Esfera : public ObjRevolucion{
 
   public:
 
-	Esfera (float radio, int num_puntos_perf, int num_instancias, int tapa){
+	Esfera (float radio, int num_puntos_perf, int num_instancias, int tapa, float r, float g, float b){
 
 		Tupla3f vertice;
 		float x, y, z;
@@ -36,14 +36,14 @@ class Esfera : public ObjRevolucion{
 		vertices_originales.push_back({origen(0), origen(1) + radio, origen(2)});
 
 
-		crearMalla (vertices_originales, num_instancias, tapa);
+		crearMalla (vertices_originales, num_instancias, tapa, r, g, b);
 
 	}
 
-	Esfera(int num_puntos_perf, int num_instancias) : Esfera (1, num_puntos_perf, num_instancias, 3) {}
+	Esfera(int num_puntos_perf, int num_instancias) : Esfera (1, num_puntos_perf, num_instancias, 3, 0.0, 0.0, 0.0) {}
 
 
-	Esfera(int num_puntos_perf, int num_instancias, int tapa) : Esfera (1, num_puntos_perf, num_instancias, tapa) {}
+	Esfera(int num_puntos_perf, int num_instancias, int tapa) : Esfera (1, num_puntos_perf, num_instancias, tapa, 0.0, 0.0, 0.0) {}
 
 };
 

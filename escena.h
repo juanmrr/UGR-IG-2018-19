@@ -33,6 +33,8 @@ class Escena
    bool animado = false;
    std::vector<Luz> luces;
    std::vector<Camara> camaras;
+   bool botonIzquierdoPulsado = false;
+   int cx = 0, cy = 0;
 
    // variables que definen la posicion de la camara en coordenadas polares
    GLfloat Observer_distance;
@@ -67,6 +69,16 @@ class Escena
    Cuenco * cuenco = nullptr;
    Cuadro * cuadro = nullptr;
    Dado * dado = nullptr;
+
+	Cono * cono_sel = nullptr;
+	Cubo * cubo_sel = nullptr;
+	Cilindro * cilindro_sel_1 = nullptr;
+	Cilindro * cilindro_sel_2 = nullptr;
+	Cilindro * cilindro_sel_3 = nullptr;
+	Cilindro * cilindro_sel_4 = nullptr;
+	Esfera * esfera_sel_1 = nullptr;
+	Esfera * esfera_sel_2 = nullptr;
+	Esfera * esfera_sel_3 = nullptr;
    
 
    // completar: añadir punteros a tetraedro u otros (práctica 1),
@@ -90,11 +102,18 @@ class Escena
 
 	// Dibujar
 	void dibujar() ;
+	void draw_objects();
+	void draw_trasero();
+	void colocar_escena();
 
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
 	void mgeDesocupado();
+	void mouseFunc(GLint button, GLint state, GLint x, GLint y);
+	void motionFunc( int x, int y);
+	Tupla3ub leer_pixel(GLint x, GLint y);
+	void seleccionar(Tupla3ub pixel);
 
    private:
 	void conmutarAnimaciones();

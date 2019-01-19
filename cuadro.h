@@ -54,7 +54,7 @@ class Cuadro : public ObjMallaIndexada{
 
 	public:
 
-		Cuadro(){
+		Cuadro(int r, int g, int b){
 
 			vertices = {{ 0.0,  1.0, 0.0},
 					{ 1.0,  1.0, 0.0},
@@ -86,13 +86,7 @@ class Cuadro : public ObjMallaIndexada{
 			else
 				triangulos_par.push_back(triangulos[i]);
 
-	   	Tupla3f color_default = {0, 0, 0};
-	   	Tupla3f color_secundario = {0.5, 0.5, 0};
-
-	   	for (int i = 0; i < vertices.size(); i++){
-			colores_default.push_back(color_default);
-			colores_secundario.push_back(color_secundario);
-	   	}
+	   	setColor(r, g, b);
 
 		calcular_normales();
 
@@ -113,6 +107,8 @@ class Cuadro : public ObjMallaIndexada{
    	coordenadas_texturas_vertices.push_back(Tupla2f(2.0,2.0));
 
 	}
+
+	Cuadro() : Cuadro(0, 0, 0) {};
 
 };
 

@@ -109,6 +109,27 @@ void special_keys( int tecla, int x, int y )
 // bucle de eventos
 //***************************************************************************
 
+void mouseFunc(GLint button, GLint state, GLint x, GLint y){
+
+   escena->mouseFunc( button, state, x, y);
+   glutPostRedisplay();
+   
+}
+
+void motionFunc(int x, int y){
+
+   escena->motionFunc( x, y);
+   glutPostRedisplay();
+   
+}
+
+//***************************************************************************
+// Programa principal
+//
+// Se encarga de iniciar la ventana, asignar las funciones e comenzar el
+// bucle de eventos
+//***************************************************************************
+
 int main( int argc, char **argv )
 {
    using namespace std ;
@@ -125,8 +146,8 @@ int main( int argc, char **argv )
    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
    // variables que determninan la posicion y tamaño de la ventana X
-   const int UI_window_pos_x  = 50,
-             UI_window_pos_y  = 50,
+   const int UI_window_pos_x  = 0,
+             UI_window_pos_y  = 0,
              UI_window_width  = 500,
              UI_window_height = 500;
 
@@ -137,7 +158,7 @@ int main( int argc, char **argv )
    glutInitWindowSize(UI_window_width,UI_window_height);
 
    // llamada para crear la ventana, indicando el titulo
-   glutCreateWindow("Practicas IG: Juan Manuel Rubio Rodriguez");
+   glutCreateWindow("Practicas IG: Pedro Luis Fuertes");
 
    // asignación de la funcion llamada "dibujar" al evento de dibujo
    glutDisplayFunc( draw_scene );
@@ -150,6 +171,15 @@ int main( int argc, char **argv )
 
    // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
    glutSpecialFunc( special_keys );
+
+   //Pulsación de botones del ratón
+   glutMouseFunc( mouseFunc );
+
+   //Movimiento del ratón mientras se pulsa un botón
+   glutMotionFunc( motionFunc );
+
+   // Para evitar el degradado
+   //glShadeModel( GL_FLAT ); 
 
    // inicialización de librería GLEW (solo en Linux)
    #ifdef LINUX
@@ -167,9 +197,6 @@ int main( int argc, char **argv )
    escena->inicializar( UI_window_width, UI_window_height );
 
    // TEST
-
-   //glutMouseFunc (clickRaton);
-   //glutMotionFunc (ratonMovido);
 
    // ejecutar del bucle de eventos
    glutMainLoop();

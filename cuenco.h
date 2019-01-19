@@ -18,7 +18,7 @@ class Cuenco : public ObjRevolucion{
 
   public:
 
-	Cuenco (float radio_interior, float radio_exterior, int num_puntos_perf, int num_instancias, int tapa){
+	Cuenco (float radio_interior, float radio_exterior, int num_puntos_perf, int num_instancias, int tapa, int r, int g, int b){
 
 		Tupla3f vertice;
 		float x, y, z;
@@ -41,14 +41,14 @@ class Cuenco : public ObjRevolucion{
 			vertices_originales.push_back(vertice);
 		}
 
-		crearMalla (vertices_originales, num_instancias, tapa);
+		crearMalla (vertices_originales, num_instancias, tapa, r, g, b);
 
 	}
 
-	Cuenco(int num_puntos_perf, int num_instancias) : Cuenco (0.4, 0.5, num_puntos_perf, num_instancias, 2) {}
+	Cuenco(int num_puntos_perf, int num_instancias) : Cuenco (0.4, 0.5, num_puntos_perf, num_instancias, 2, 0, 0, 0) {}
 
 
-	Cuenco(int num_puntos_perf, int num_instancias, int tapa) : Cuenco (0.4, 0.5, num_puntos_perf, num_instancias, tapa) {}
+	Cuenco(int num_puntos_perf, int num_instancias, int tapa) : Cuenco (0.4, 0.5, num_puntos_perf, num_instancias, tapa, 0, 0, 0) {}
 
 };
 

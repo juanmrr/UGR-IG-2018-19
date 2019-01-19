@@ -17,7 +17,7 @@ class Cono : public ObjRevolucion {
 
   public:
 
-	Cono (float radio, float altura, int num_puntos_perf, int num_instancias, int tapa){
+	Cono (float radio, float altura, int num_puntos_perf, int num_instancias, int tapa, int r, int g, int b){
 
 		Tupla3f vertice;
 		float x, y, z;
@@ -30,14 +30,14 @@ class Cono : public ObjRevolucion {
 			vertices_originales.push_back(vertice);
 		}
 
-		crearMalla (vertices_originales, num_instancias, tapa);
+		crearMalla (vertices_originales, num_instancias, tapa, r, g, b);
 
 	}
 
-	Cono(int num_puntos_perf, int num_instancias) : Cono (0.5, 1, num_puntos_perf, num_instancias, 3) {}
+	Cono(int num_puntos_perf, int num_instancias) : Cono (0.5, 1, num_puntos_perf, num_instancias, 3, 0, 0, 0) {}
 
 
-	Cono(int num_puntos_perf, int num_instancias, int tapa) : Cono (0.5, 1, num_puntos_perf, num_instancias, tapa) {}
+	Cono(int num_puntos_perf, int num_instancias, int tapa) : Cono (0.5, 1, num_puntos_perf, num_instancias, tapa, 0, 0, 0) {}
 
 
 };

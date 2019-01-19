@@ -62,14 +62,13 @@ void Camara::rotarXExaminar (float angle){
 	//std::cout << "eje y: " << v(0) << "," << v(1) << "," << v(2) << std::endl;
 
 	// Matriz de vista (alinear ejes de la cámara a los del mundo y la cámara respecto al origen)
-	eye = {producto_escalar(-eye, u, 3), producto_escalar(-eye, v, 3), producto_escalar(-eye, n, 3)};
+	eye = {producto_escalar(eye, u, 3), producto_escalar(eye, v, 3), producto_escalar(eye, n, 3)};
 
 	//std::cout << "eye escalar :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
 	// Calcular y realizar el giro pertinente
-	float hip = sqrt(eye(1)*eye(1) + eye(2)*eye(2));
 
-	eye = {eye(0), (float)sin(angle*PI/180)*hip, (float)cos(angle*PI/180)*hip};
+	eye = {eye(0), (float)cos(angle*PI/180)*eye(1) - (float)sin(angle*PI/180)*eye(2) , (float)sin(angle*PI/180)*eye(1) + (float)cos(angle*PI/180)*eye(2)};
 
 	//std::cout << "eye en el origen :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
@@ -94,12 +93,11 @@ void Camara::rotarXExaminar (float angle){
 
 	// Cálculo análogo al de la posición de la cámara
 	// Se busca que el vector del viewUp mantenga el ángulo respecto a VPN de la cámara
-	up = {producto_escalar(-up, u, 3), producto_escalar(-up, v, 3), producto_escalar(-up, n, 3)};
+	up = {producto_escalar(up, u, 3), producto_escalar(up, v, 3), producto_escalar(up, n, 3)};
 
 	// Cálculo del giro
-	hip = sqrt(up(1)*up(1) + up(2)*up(2));
 
-	up = {up(0), (float)cos(angle*PI/180)*hip, (float)sin(angle*PI/180)*hip};
+	up = {up(0), (float)cos(angle*PI/180)*up(1) - (float)sin(angle*PI/180)*up(2) , (float)sin(angle*PI/180)*up(1) + (float)cos(angle*PI/180)*up(2)};
 
 	// Nuevas coordenadas del vector viewUp
       s = u(0) * v(1) * n(2) + u(1) * v(2) * n(0) + u(2) * v(0) * n(1) - (u(2) * v(1) * n(0) + u(1) * v(0) * n(2) + u(0) * v(2) * n(1));
@@ -161,13 +159,11 @@ void Camara::rotarYExaminar (float angle){
 
 	//std::cout << "eje y: " << v(0) << "," << v(1) << "," << v(2) << std::endl;
 
-	eye = {producto_escalar(-eye, u, 3), producto_escalar(-eye, v, 3), producto_escalar(-eye, n, 3)};
+	eye = {producto_escalar(eye, u, 3), producto_escalar(eye, v, 3), producto_escalar(eye, n, 3)};
 
 	//std::cout << "eye escalar :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
-	float hip = sqrt(eye(1)*eye(1) + eye(2)*eye(2));
-
-	eye = {(float)sin(angle*PI/180)*hip, eye(1), (float)cos(angle*PI/180)*hip};
+	eye = {(float)cos(angle*PI/180)*eye(0) - (float)sin(angle*PI/180)*eye(2), eye(1), (float)sin(angle*PI/180)*eye(0) + (float)cos(angle*PI/180)*eye(2)};
 
 	//std::cout << "eye en el origen :" << eye(0) << "," << eye(1) << "," << eye(2) << std::endl;
 
@@ -191,9 +187,7 @@ void Camara::rotarYExaminar (float angle){
 
 	up = {producto_escalar(up, u, 3), producto_escalar(up, v, 3), producto_escalar(up, n, 3)};
 
-	hip = sqrt(up(1)*up(1) + up(2)*up(2));
-
-	up = {(float)sin(angle*PI/180)*hip, up(1), (float)cos(angle*PI/180)*hip};
+	up = {(float)cos(angle*PI/180)*up(0) - (float)sin(angle*PI/180)*up(2), up(1), (float)sin(angle*PI/180)*up(0) + (float)cos(angle*PI/180)*up(2)};
 
       s = u(0) * v(1) * n(2) + u(1) * v(2) * n(0) + u(2) * v(0) * n(1) - (u(2) * v(1) * n(0) + u(1) * v(0) * n(2) + u(0) * v(2) * n(1));
 

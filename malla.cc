@@ -10,6 +10,9 @@
 #include "malla.h"
 #include "math.h"
 #include "textura.h"
+#include <limits.h>
+#include <cstdlib>
+
 
 using namespace std;
 
@@ -87,7 +90,7 @@ GLuint ObjMallaIndexada::CrearVBO( GLuint tipo_vbo, GLuint tamanio_bytes, GLvoid
 
 // Visualización en modo inmediato con 'glDrawElements'
 
-void ObjMallaIndexada::draw_ModoInmediato (int visualizacion, int textura_activa)
+void ObjMallaIndexada::draw_ModoInmediato (int visualizacion, int textura_activa, int color)
 {
   // visualizar la malla usando glDrawElements,
   // completar (práctica 1)
@@ -121,14 +124,17 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion, int textura_activa
   }
   else{
 	  glEnableClientState(GL_COLOR_ARRAY);
-	  glColorPointer(3, GL_FLOAT, 0, colores_default.data());
+	  if (seleccionado)
+	  	glColorPointer(3, GL_FLOAT, 0, colores[2].data());
+	  else
+		glColorPointer(3, GL_FLOAT, 0, colores[color].data());
 	  // visualizar, indicando: tipo de primitiva, número de índices,
 	  // tipo de los índices, y dirección de la tabla de índices
 	  glDrawElements( GL_TRIANGLES, triangulos_par.size()*3, GL_UNSIGNED_INT, triangulos_par.data() );
 	  
 	  // si queremos visualizar el modo ajedrez, queremos pintar las caras impares de otro color
 	  if (visualizacion == 3)
-		glColorPointer(3, GL_FLOAT, 0, colores_secundario.data());
+		glColorPointer(3, GL_FLOAT, 0, colores[1].data());
 	  
 	  // en cualquier caso, vamos a querer pintar las caras impares
 	  glDrawElements( GL_TRIANGLES, triangulos_impar.size()*3, GL_UNSIGNED_INT, triangulos_impar.data() );
@@ -137,6 +143,31 @@ void ObjMallaIndexada::draw_ModoInmediato (int visualizacion, int textura_activa
 	  glDisableClientState(GL_COLOR_ARRAY);
 	  glDisableClientState (GL_NORMAL_ARRAY);
   }
+
+}
+
+// Draw para el back de la escena
+
+void ObjMallaIndexada::draw_back ()
+{
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glEnableClientState (GL_NORMAL_ARRAY);
+  glEnableClientState( GL_VERTEX_ARRAY );
+  glVertexPointer( 3, GL_FLOAT, 0, vertices.data() ) ;
+  glNormalPointer (GL_FLOAT, 0, normales.data());
+  glEnableClientState(GL_COLOR_ARRAY);
+  glColorPointer(3, GL_UNSIGNED_BYTE, 0, colores_back.data());
+	  // visualizar, indicando: tipo de primitiva, número de índices,
+	  // tipo de los índices, y dirección de la tabla de índices
+  glDrawElements( GL_TRIANGLES, triangulos_par.size()*3, GL_UNSIGNED_INT, triangulos_par.data() );
+
+	  // en cualquier caso, vamos a querer pintar las caras impares
+  glDrawElements( GL_TRIANGLES, triangulos_impar.size()*3, GL_UNSIGNED_INT, triangulos_impar.data() );
+	  // deshabilitar array de vértices
+  glDisableClientState( GL_VERTEX_ARRAY );
+  glDisableClientState(GL_COLOR_ARRAY);
+  glDisableClientState (GL_NORMAL_ARRAY);
 
 }
 
@@ -158,10 +189,10 @@ void ObjMallaIndexada::draw_ModoDiferido (int visualizacion)
    // comprobamos el buffer de colores
 
    if (id_vbo_col_default == 0)
-	id_vbo_col_default = CrearVBO (GL_ARRAY_BUFFER, colores_default.size()*sizeof(Tupla3f)*sizeof(float), colores_default.data());
+	id_vbo_col_default = CrearVBO (GL_ARRAY_BUFFER, colores[0].size()*sizeof(Tupla3f)*sizeof(float), colores[0].data());
 
    if (id_vbo_col_impar == 0)
-	id_vbo_col_impar = CrearVBO (GL_ARRAY_BUFFER, colores_secundario.size()*sizeof(Tupla3f)*sizeof(float), colores_secundario.data());
+	id_vbo_col_impar = CrearVBO (GL_ARRAY_BUFFER, colores[1].size()*sizeof(Tupla3f)*sizeof(float), colores[1].data());
 
    // comprobamos el buffer de triangulos
 
@@ -211,14 +242,14 @@ void ObjMallaIndexada::draw_ModoDiferido (int visualizacion)
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void ObjMallaIndexada::draw(int modo, int visualizacion, int textura_activa)
+void ObjMallaIndexada::draw(int modo, int visualizacion, int textura_activa, int color)
 {
    // completar .....(práctica 1)
    glEnable(GL_CULL_FACE); // Elimina las partes de atrás de los triángulos
 
    switch(modo){
 	case 0:
-		draw_ModoInmediato(visualizacion, textura_activa);
+		draw_ModoInmediato(visualizacion, textura_activa, color);
 		break;
 	case 1:
 		draw_ModoDiferido(visualizacion);
@@ -271,7 +302,7 @@ void ObjMallaIndexada::calcular_normales()
 //
 // *****************************************************************************
 
-ObjPLY::ObjPLY( const std::string & nombre_archivo )
+ObjPLY::ObjPLY( const std::string & nombre_archivo, int r, int g, int b )
 {
    	// leer la lista de caras y vértices
  	  ply::read( nombre_archivo, vertices, triangulos );
@@ -285,17 +316,28 @@ ObjPLY::ObjPLY( const std::string & nombre_archivo )
 		triangulos_par.push_back(triangulos[i]);
   	 }
 
-   	Tupla3f color_default = {0.0, 0.0, 0.0};
-   	Tupla3f color_secundario = {0.0, 1.0, 0.0};
+	float r_rand, g_rand, b_rand;
 
+	r_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	g_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	b_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	Tupla3f color_default = {r_rand, g_rand, b_rand};
+	Tupla3f color_secundario = {0.3, 0.3, 0.6};
+	Tupla3ub color_back = {r, g, b};
+	Tupla3f color_seleccion = {1.0, 1.0, 0.0};
   	 // rellenamos los dos vectores de colores
 
   	 for (int j = 0; j < vertices.size(); j++){
-		colores_secundario.push_back (color_secundario);
-		colores_default.push_back (color_default);
+		colores[1].push_back (color_secundario);
+		colores[0].push_back (color_default);
+		colores[2].push_back (color_seleccion);
+		colores_back.push_back (color_back);
    	}
 
-	normalesPLY();
+	calcular_normales();
+
+	//normalesPLY();
 
 }
 
@@ -355,7 +397,7 @@ ObjRevolucion::ObjRevolucion( const std::string & nombre_ply_perfil, const int n
    // completar ......(práctica 2)
 	
 	ply::read_vertices (nombre_ply_perfil, vertices_originales);
-	crearMalla (vertices_originales, num_instancias, 3);
+	crearMalla (vertices_originales, num_instancias, 3, 0.3, 0.3, 0.3);
 
 }
 
@@ -364,7 +406,7 @@ ObjRevolucion::ObjRevolucion( const std::string & nombre_ply_perfil, const int n
    // completar ......(práctica 2)
 	
 	ply::read_vertices (nombre_ply_perfil, vertices_originales);
-	crearMalla (vertices_originales, num_instancias, tapa);
+	crearMalla (vertices_originales, num_instancias, tapa, 0.3, 0.3, 0.3);
 
 }
 
@@ -386,10 +428,10 @@ void ObjRevolucion::crearTapa (const int tapa, const int M, const int N){
 
 }
 
-void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, const int num_instancias_perf, const int tapa){
+void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, const int num_instancias_perf, const int tapa, int r, int g, int b){
 
 	Tupla3f ver;
-	float x, y, z, a, b;
+	float x, y, z;
 	bool ascendente = true;
 
 	std::vector<Tupla3f> aux = perfil_original;
@@ -466,13 +508,7 @@ void ObjRevolucion::crearMalla( const std::vector<Tupla3f> & perfil_original, co
 
 	// por último, generamos los arrays de colores
 
-	Tupla3f color_default = {0, 0, 0};
-	Tupla3f color_secundario = {0.5, 0.5, 0};
-
-	for (int i = 0; i < vertices.size(); i++){
-		colores_default.push_back(color_default);
-		colores_secundario.push_back(color_secundario);
-	}
+	setColor(r, g, b);
 
 }
 
@@ -551,5 +587,39 @@ std::vector<Tupla3f> ObjRevolucion::cambiarAPerfilAscendente(std::vector<Tupla3f
 void ObjMallaIndexada::sigMaterial(){
 
 	material = (material + 1) % materiales.size();
+
+}
+
+void ObjMallaIndexada::setColor(int r, int g, int b){
+
+	float r_rand, g_rand, b_rand;
+
+	r_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	g_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	b_rand = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	Tupla3f color_default = {r_rand, g_rand, b_rand};
+	Tupla3f color_secundario = {0.3, 0.3, 0.6};
+	Tupla3ub color_back = {r, g, b};
+	Tupla3f color_seleccion = {1.0, 1.0, 0.0};
+
+	for (int i = 0; i < vertices.size(); i++){
+		colores[0].push_back(color_default);
+		colores[1].push_back(color_secundario);
+		colores[2].push_back(color_seleccion);
+		colores_back.push_back(color_back);
+	}
+
+}
+
+void ObjMallaIndexada::setSeleccionado(bool seleccionado){
+
+	this->seleccionado = seleccionado;
+
+}
+
+bool ObjMallaIndexada::getSeleccionado(){
+
+	return seleccionado;
 
 }

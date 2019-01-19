@@ -158,7 +158,7 @@ int main( int argc, char **argv )
    glutInitWindowSize(UI_window_width,UI_window_height);
 
    // llamada para crear la ventana, indicando el titulo
-   glutCreateWindow("Practicas IG: Pedro Luis Fuertes");
+   glutCreateWindow("Practicas IG: Juan Manuel Rubio Rodriguez");
 
    // asignación de la funcion llamada "dibujar" al evento de dibujo
    glutDisplayFunc( draw_scene );

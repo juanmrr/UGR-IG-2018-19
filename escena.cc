@@ -65,8 +65,11 @@ Escena::Escena()
     // .......completar: ...
     // .....
 
-    camaras.push_back(Camara({0, 20, 0}, {0, 0, 0}, {1, 0, 0}, 1, -0.5, 0.5, -0.5, 0.5, 0.1, 40.0));
-    camaras.push_back(Camara({0, 0, 20}, {0, 0, 0}, {0, 1, 0}, 0, -0.5, 0.5, -0.5, 0.5, 0.0, 40.0));
+    camaras.push_back(Camara({0, 0, 1}, {0, 0, 0}, {0, 1, 0}, 0, -0.5, 0.5, -0.5, 0.5, 0.1, 50.0));
+    camaras.push_back(Camara({0, 0, 20}, {0, 0, 0}, {0, 1, 0}, 1, -0.03, 0.03, -0.03, 0.03, 0.1, 50.0));
+    camaras.push_back(Camara({0, 20, 0}, {0, 0, 0}, {1, 0, 0}, 1, -0.03, 0.03, -0.03, 0.03, 0.1, 50.0));
+    camaras.push_back(Camara({20, 0, 0}, {0, 0, 0}, {0, 1, 0}, 1, -0.03, 0.03, -0.03, 0.03, 0.1, 50.0));
+    camaras.push_back(Camara({20, 20, 20}, {0, 0, 0}, {0, 1, 0}, 1, -0.03, 0.03, -0.03, 0.03, 0.1, 50.0));
 
     num_objetos = 7 ; // se usa al pulsar la tecla 'O' (rotar objeto actual)
 }
@@ -212,6 +215,7 @@ void Escena::dibujar_luces(){
 
 void Escena::dibujar()
 {
+/*
 	glEnable (GL_NORMALIZE);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
@@ -226,6 +230,81 @@ void Escena::dibujar()
 	if (glIsEnabled(GL_LIGHTING))
 		dibujar_luces();
 	dibujar_objeto_actual();
+*/
+
+	//////////////////////////////////
+	////
+	////	Pruebas con ViewPort
+	////
+	//////////////////////////////////
+
+
+
+	glEnable (GL_NORMALIZE);
+
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
+
+	glViewport(0, Height/2, Width/2, Height/2);
+   	camaras[1].setProyeccion();
+   	camaras[1].setObserver();
+	// si las luces están activadas, las desactivamos temporalmente para dibujar los ejes
+	if (glIsEnabled (GL_LIGHTING)){
+		glDisable (GL_LIGHTING);
+  			ejes.draw();
+		glEnable (GL_LIGHTING);
+	}
+	else
+		ejes.draw();
+	if (glIsEnabled(GL_LIGHTING))
+		dibujar_luces();
+	dibujar_objeto_actual();
+
+	glViewport(Width/2, Height/2, Width/2, Height/2);
+   	camaras[2].setProyeccion();
+   	camaras[2].setObserver();
+	// si las luces están activadas, las desactivamos temporalmente para dibujar los ejes
+	if (glIsEnabled (GL_LIGHTING)){
+		glDisable (GL_LIGHTING);
+  			ejes.draw();
+		glEnable (GL_LIGHTING);
+	}
+	else
+		ejes.draw();
+	if (glIsEnabled(GL_LIGHTING))
+		dibujar_luces();
+	dibujar_objeto_actual();
+
+	glViewport(0, 0, Width/2, Height/2);
+   	camaras[3].setProyeccion();
+   	camaras[3].setObserver();
+	// si las luces están activadas, las desactivamos temporalmente para dibujar los ejes
+	if (glIsEnabled (GL_LIGHTING)){
+		glDisable (GL_LIGHTING);
+  			ejes.draw();
+		glEnable (GL_LIGHTING);
+	}
+	else
+		ejes.draw();
+	if (glIsEnabled(GL_LIGHTING))
+		dibujar_luces();
+	dibujar_objeto_actual();
+
+	glViewport(Width/2, 0, Width/2, Height/2);
+   	camaras[4].setProyeccion();
+   	camaras[4].setObserver();
+	// si las luces están activadas, las desactivamos temporalmente para dibujar los ejes
+	if (glIsEnabled (GL_LIGHTING)){
+		glDisable (GL_LIGHTING);
+  			ejes.draw();
+		glEnable (GL_LIGHTING);
+	}
+	else
+		ejes.draw();
+	if (glIsEnabled(GL_LIGHTING))
+		dibujar_luces();
+	dibujar_objeto_actual();
+
+
 }
 
 //**************************************************************************
@@ -493,6 +572,12 @@ void Escena::teclaEspecial( int Tecla1, int x, int y )
 	   camaras[camara_activa].zoom(-1.2);
          //Observer_distance /= 1.2 ;
          break;
+	   case GLUT_KEY_F1:
+	   camara_activa = 0;
+	   break;
+	   case GLUT_KEY_F2:
+	   camara_activa = 1;
+	   break;
 	}
 
 	//std::cout << Observer_distance << std::endl;
@@ -553,7 +638,19 @@ void Escena::mgeDesocupado(){
 		glutPostRedisplay();
 	}
 	
-	camaras[camara_activa].girar();
+	//camaras[camara_activa].girar();
+
+		//////////////////
+		////
+		////	Pantalla dividida
+		////
+		/////////////////
+
+	camaras[1].girar();
+	camaras[2].girar();
+	camaras[3].girar();
+	camaras[4].girar();
+
 	glutPostRedisplay();
 }
 
@@ -574,7 +671,22 @@ void Escena::conmutarAnimaciones(){
 		//	luces[3].inicioAnimaciones();
 	 	//	glutIdleFunc( funcion_desocupado );
 		//}
-		camaras[camara_activa].inicioAnimaciones();
+
+		//camaras[camara_activa].inicioAnimaciones();
+
+		//////////////////
+		////
+		////	Pantalla dividida
+		////
+		/////////////////
+
+		camaras[1].inicioAnimaciones();
+		camaras[2].inicioAnimaciones();
+		camaras[3].inicioAnimaciones();
+		camaras[4].inicioAnimaciones();
+
+		////////////////
+
 		glutIdleFunc( funcion_desocupado );
 	 }else
 		glutIdleFunc( nullptr );
@@ -592,13 +704,45 @@ void Escena::mouseFunc(GLint button, GLint state, GLint x, GLint y){
   case GLUT_RIGHT_BUTTON:
     if(state == GLUT_DOWN)
     	if(objeto_actual == 6){
+		
+		////////////////////
+		/////
+		/////	Pantalla dividida
+		/////
+		////////////////////
+
+		if(x < Width/2 && y < Height/2){
+			glViewport(0, Height/2, Width/2, Height/2);
+   			camaras[1].setProyeccion();
+   			camaras[1].setObserver();
+		}
+		else if(x > Width/2 && y < Height/2){
+			glViewport(Width/2, Height/2, Width/2, Height/2);
+   			camaras[2].setProyeccion();
+   			camaras[2].setObserver();
+		}
+		else if(x < Width/2 && y > Height/2){
+			glViewport(0, 0, Width/2, Height/2);
+   			camaras[3].setProyeccion();
+   			camaras[3].setObserver();
+		}
+		else{
+			glViewport(Width/2, 0, Width/2, Height/2);
+   			camaras[4].setProyeccion();
+   			camaras[4].setObserver();
+		}
+
+		/////////////////
+		
   		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		glDisable(GL_DITHER);
+		glDisable(GL_LIGHTING);
 		draw_trasero();
 		Tupla3ub pixel = leer_pixel(x, y);
 		seleccionar(pixel);
 		glFlush();
       	glEnable(GL_DITHER);
+		glEnable(GL_LIGHTING);
     }
   break;
   case 3:
@@ -607,7 +751,7 @@ void Escena::mouseFunc(GLint button, GLint state, GLint x, GLint y){
   break;
   case 4:
     // Rueda del ratón zoon+
-    camaras[camara_activa].zoom(+1.2) ;
+    camaras[camara_activa].zoom(1.2) ;
   break;
   }
 
@@ -764,18 +908,40 @@ void Escena::draw_trasero(){
 }
 
 Tupla3ub Escena::leer_pixel(GLint x, GLint y){
-	
+
 	Tupla3ub pixels;
 
 	GLint viewport[4];
-	int pixel[3];
+	unsigned char pixel[3];
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	//glReadBuffer(GL_BACK);
-	glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB,GL_UNSIGNED_INT, (GLubyte *) &pixel[0]);
+	//glReadPixels(x, viewport[3]-y, 1, 1, GL_RGB,GL_UNSIGNED_BYTE, (GLubyte *) &pixel[0]);
 
-	for(int i = 0; i < 3; i++)
+	//////////////////////
+	////
+	////	Prueba con Viewport
+	////
+	//////////////////////
+
+	if(x < Width/2 && y < Height/2){
+		glReadPixels(x, 2*viewport[2] - y, 1, 1, GL_RGB,GL_UNSIGNED_BYTE, (GLubyte *) &pixel[0]);
+	}
+	else if(x > Width/2 && y < Height/2){
+		glReadPixels(x, 2*viewport[2] - y, 1, 1, GL_RGB,GL_UNSIGNED_BYTE, (GLubyte *) &pixel[0]);
+	}
+	else if(x < Width/2 && y > Height/2){
+		glReadPixels(x, viewport[3]*2 - y, 1, 1, GL_RGB,GL_UNSIGNED_BYTE, (GLubyte *) &pixel[0]);
+	}
+	else{
+		glReadPixels(x, viewport[3]*2 - y, 1, 1, GL_RGB,GL_UNSIGNED_BYTE, (GLubyte *) &pixel[0]);
+	}
+
+	//////////////////////
+
+	for(int i = 0; i < 3; i++){
 		pixels(i) = pixel[i];
+	}
 
 	return pixels;
 
@@ -784,7 +950,7 @@ Tupla3ub Escena::leer_pixel(GLint x, GLint y){
 void Escena::seleccionar(Tupla3ub pixel){
 
 	int color = pixel(2);
-
+/*
 	switch (color){
 		case 20:
 			if (cubo_sel->getSeleccionado()){
@@ -874,6 +1040,159 @@ void Escena::seleccionar(Tupla3ub pixel){
 			else{
 				esfera_sel_3->setSeleccionado(true);
 				camaras[camara_activa].setObjetivo({esfera_sel_3->getCentro()});
+			}
+		break;
+	}*/
+
+	//////////////////
+	////
+	////	Con pantalla dividida
+	////
+	/////////////////
+
+	switch (color){
+		case 20:
+			if (cubo_sel->getSeleccionado()){
+				cubo_sel->setSeleccionado(false);
+				camaras[1].setObjetivo({cubo_sel->getOrigen()});
+				camaras[2].setObjetivo({cubo_sel->getOrigen()});
+				camaras[3].setObjetivo({cubo_sel->getOrigen()});
+				camaras[4].setObjetivo({cubo_sel->getOrigen()});
+			}
+			else{
+				cubo_sel->setSeleccionado(true);
+				camaras[1].setObjetivo(cubo_sel->getCentro());
+				camaras[2].setObjetivo(cubo_sel->getCentro());
+				camaras[3].setObjetivo(cubo_sel->getCentro());
+				camaras[4].setObjetivo(cubo_sel->getCentro());
+			}
+		break;
+		case 40:
+			if (cono_sel->getSeleccionado()){
+				cono_sel->setSeleccionado(false);
+				camaras[1].setObjetivo({cono_sel->getOrigen()});
+				camaras[2].setObjetivo({cono_sel->getOrigen()});
+				camaras[3].setObjetivo({cono_sel->getOrigen()});
+				camaras[4].setObjetivo({cono_sel->getOrigen()});
+			}
+			else{
+				cono_sel->setSeleccionado(true);
+				camaras[1].setObjetivo(cono_sel->getCentro());
+				camaras[2].setObjetivo(cono_sel->getCentro());
+				camaras[3].setObjetivo(cono_sel->getCentro());
+				camaras[4].setObjetivo(cono_sel->getCentro());
+			}
+		break;
+		case 60:
+			if (cilindro_sel_1->getSeleccionado()){
+				cilindro_sel_1->setSeleccionado(false);
+				camaras[1].setObjetivo({cilindro_sel_1->getOrigen()});
+				camaras[2].setObjetivo({cilindro_sel_1->getOrigen()});
+				camaras[3].setObjetivo({cilindro_sel_1->getOrigen()});
+				camaras[4].setObjetivo({cilindro_sel_1->getOrigen()});
+			}
+			else{
+				cilindro_sel_1->setSeleccionado(true);
+				camaras[1].setObjetivo({cilindro_sel_1->getCentro()});
+				camaras[2].setObjetivo({cilindro_sel_1->getCentro()});
+				camaras[3].setObjetivo({cilindro_sel_1->getCentro()});
+				camaras[4].setObjetivo({cilindro_sel_1->getCentro()});
+			}
+		break;
+		case 80:
+			if (cilindro_sel_2->getSeleccionado()){
+				cilindro_sel_2->setSeleccionado(false);
+				camaras[1].setObjetivo({cilindro_sel_2->getOrigen()});
+				camaras[2].setObjetivo({cilindro_sel_2->getOrigen()});
+				camaras[3].setObjetivo({cilindro_sel_2->getOrigen()});
+				camaras[4].setObjetivo({cilindro_sel_2->getOrigen()});
+			}
+			else{
+				cilindro_sel_2->setSeleccionado(true);
+				camaras[1].setObjetivo({cilindro_sel_2->getCentro()});
+				camaras[2].setObjetivo({cilindro_sel_2->getCentro()});
+				camaras[3].setObjetivo({cilindro_sel_2->getCentro()});
+				camaras[4].setObjetivo({cilindro_sel_2->getCentro()});
+			}
+		break;
+		case 100:
+			if (cilindro_sel_3->getSeleccionado()){
+				cilindro_sel_3->setSeleccionado(false);
+				camaras[1].setObjetivo({cilindro_sel_3->getOrigen()});
+				camaras[2].setObjetivo({cilindro_sel_3->getOrigen()});
+				camaras[3].setObjetivo({cilindro_sel_3->getOrigen()});
+				camaras[4].setObjetivo({cilindro_sel_3->getOrigen()});
+			}
+			else{
+				cilindro_sel_3->setSeleccionado(true);
+				camaras[1].setObjetivo({cilindro_sel_3->getCentro()});
+				camaras[2].setObjetivo({cilindro_sel_3->getCentro()});
+				camaras[3].setObjetivo({cilindro_sel_3->getCentro()});
+				camaras[4].setObjetivo({cilindro_sel_3->getCentro()});
+			}
+		break;
+		case 120:
+			if (cilindro_sel_4->getSeleccionado()){
+				cilindro_sel_4->setSeleccionado(false);
+				camaras[1].setObjetivo({cilindro_sel_4->getOrigen()});
+				camaras[2].setObjetivo({cilindro_sel_4->getOrigen()});
+				camaras[3].setObjetivo({cilindro_sel_4->getOrigen()});
+				camaras[4].setObjetivo({cilindro_sel_4->getOrigen()});
+			}
+			else{
+				cilindro_sel_4->setSeleccionado(true);
+				camaras[1].setObjetivo({cilindro_sel_4->getCentro()});
+				camaras[2].setObjetivo({cilindro_sel_4->getCentro()});
+				camaras[3].setObjetivo({cilindro_sel_4->getCentro()});
+				camaras[4].setObjetivo({cilindro_sel_4->getCentro()});
+			}
+		break;
+		case 140:
+			if (esfera_sel_1->getSeleccionado()){
+				esfera_sel_1->setSeleccionado(false);
+				camaras[1].setObjetivo({esfera_sel_1->getOrigen()});
+				camaras[2].setObjetivo({esfera_sel_1->getOrigen()});
+				camaras[3].setObjetivo({esfera_sel_1->getOrigen()});
+				camaras[4].setObjetivo({esfera_sel_1->getOrigen()});
+			}
+			else{
+				esfera_sel_1->setSeleccionado(true);
+				camaras[1].setObjetivo({esfera_sel_1->getCentro()});
+				camaras[2].setObjetivo({esfera_sel_1->getCentro()});
+				camaras[3].setObjetivo({esfera_sel_1->getCentro()});
+				camaras[4].setObjetivo({esfera_sel_1->getCentro()});
+			}
+		break;
+		case 160:
+			if (esfera_sel_2->getSeleccionado()){
+				esfera_sel_2->setSeleccionado(false);
+				camaras[1].setObjetivo({esfera_sel_2->getOrigen()});
+				camaras[2].setObjetivo({esfera_sel_2->getOrigen()});
+				camaras[3].setObjetivo({esfera_sel_2->getOrigen()});
+				camaras[4].setObjetivo({esfera_sel_2->getOrigen()});
+			}
+			else{
+				esfera_sel_2->setSeleccionado(true);
+				camaras[1].setObjetivo({esfera_sel_2->getCentro()});
+				camaras[2].setObjetivo({esfera_sel_2->getCentro()});
+				camaras[3].setObjetivo({esfera_sel_2->getCentro()});
+				camaras[4].setObjetivo({esfera_sel_2->getCentro()});
+			}
+		break;
+		case 180:
+			if (esfera_sel_3->getSeleccionado()){
+				esfera_sel_3->setSeleccionado(false);
+				camaras[1].setObjetivo({esfera_sel_3->getOrigen()});
+				camaras[2].setObjetivo({esfera_sel_3->getOrigen()});
+				camaras[3].setObjetivo({esfera_sel_3->getOrigen()});
+				camaras[4].setObjetivo({esfera_sel_3->getOrigen()});
+			}
+			else{
+				esfera_sel_3->setSeleccionado(true);
+				camaras[1].setObjetivo({esfera_sel_3->getCentro()});
+				camaras[2].setObjetivo({esfera_sel_3->getCentro()});
+				camaras[3].setObjetivo({esfera_sel_3->getCentro()});
+				camaras[4].setObjetivo({esfera_sel_3->getCentro()});
 			}
 		break;
 	}

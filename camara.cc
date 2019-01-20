@@ -221,6 +221,9 @@ void Camara::rotarZExaminar (float angulo){
 
 void Camara::setObserver(){
 
+   	glMatrixMode(GL_MODELVIEW);
+   	glLoadIdentity();
+
 	gluLookAt(eye(0), eye(1), eye(2), at(0), at(1), at(2), up(0), up(1), up(2));
 
 }
@@ -305,5 +308,4 @@ void Camara::girar(){
 void Camara::setObjetivo(Tupla3f objetivo){
 
 	at = objetivo;
-	std::cout << at(0) << " " << at(1) << " " << at(2) << std::endl;
 }

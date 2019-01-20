@@ -694,6 +694,8 @@ void Escena::conmutarAnimaciones(){
 
 void Escena::mouseFunc(GLint button, GLint state, GLint x, GLint y){
 
+  bool luz_encendida = false;
+
   switch( button ){
   case GLUT_LEFT_BUTTON:
     // mover cámara
@@ -736,13 +738,17 @@ void Escena::mouseFunc(GLint button, GLint state, GLint x, GLint y){
 		
   		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		glDisable(GL_DITHER);
-		glDisable(GL_LIGHTING);
+		if (glIsEnabled(GL_LIGHTING)){
+			glDisable(GL_LIGHTING);
+			luz_encendida = true;
+		}
 		draw_trasero();
 		Tupla3ub pixel = leer_pixel(x, y);
 		seleccionar(pixel);
 		glFlush();
       	glEnable(GL_DITHER);
-		glEnable(GL_LIGHTING);
+		if (luz_encendida)
+			glEnable(GL_LIGHTING);
     }
   break;
   case 3:
